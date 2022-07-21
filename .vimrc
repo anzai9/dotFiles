@@ -1,24 +1,33 @@
 call plug#begin('~/.config/nvim/plugged')
 " Language Client
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'dense-analysis/ale'
 
 " File explorer with icons
 Plug 'scrooloose/nerdtree'
 Plug 'ryanoasis/vim-devicons'
-Plug 'Xuyuanp/nerdtree-git-plugin', {'on': 'NERDTreeToggle'}
-Plug 'tiagofumo/vim-nerdtree-syntax-highlight', {'on': 'NERDTreeToggle'}
+
+" Golang
+Plug 'fatih/vim-go', { 'do': ':GoUpdateBinaries' }
 
 " Typescript Syntax Highlight
-Plug 'leafgarland/typescript-vim', {'for': 'ts'}
 Plug 'peitalin/vim-jsx-typescript', {'for': 'ts'}
+
+" Rust
+Plug 'rust-lang/rust.vim'
 
 " Theme
 Plug 'gruvbox-community/gruvbox'
+
+" Easy Motion
+Plug 'easymotion/vim-easymotion'
 
 " Telescope
 Plug 'nvim-lua/plenary.nvim'
 Plug 'nvim-telescope/telescope.nvim'
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
+Plug 'nvim-telescope/telescope-fzf-native.nvim', { 'do': 'make' }
+Plug 'fannheyward/telescope-coc.nvim'
 
 " Tab line
 Plug 'vim-airline/vim-airline'
@@ -27,20 +36,18 @@ Plug 'edkolev/tmuxline.vim'
 " Multi-cursor
 Plug 'mg979/vim-visual-multi', {'branch': 'master'}
 
-" File searching
-" Plug 'junegunn/fzf', { 'dir': '~/.fzf', 'do': './install --all' }
-" Plug 'junegunn/fzf.vim'
-
 " Undo handling
 Plug 'mbbill/undotree'
 
 " git
 Plug 'tpope/vim-fugitive'
 
-Plug 'ThePrimeagen/vim-be-good'
-
+" commenter
+Plug 'preservim/nerdcommenter'
 call plug#end()
 " General Settings
+syntax enable
+filetype plugin indent on
 set exrc
 set clipboard+=unnamedplus
 set history=50
@@ -120,6 +127,18 @@ endif
 colorscheme gruvbox
 
 " Mappings
+let g:EasyMotion_do_mapping = 0 " Disable default mappings
+let g:EasyMotion_leader_key = "<Leader>/"
+let g:EasyMotion_smartcase = 1  " Turn on case-insensitive feature
+nmap s <Plug>(easymotion-overwin-f2)
+"" Move to line
+map <leader><leader>jl <Plug>(easymotion-bd-jk)
+nmap <leader><leader>jl <Plug>(easymotion-overwin-line)
+"" Move to word
+map  <leader><leader>jw <Plug>(easymotion-bd-w)
+nmap <leader><leader>jw <Plug>(easymotion-overwin-w)
+" Remap the ESC
+inoremap jj <ESC>
 " With a map leader it is possible to do extra key combinations
 let mapleader = " "
 " Fast saving
@@ -155,6 +174,12 @@ function! OpenTerminal()
 endfunction
 nnoremap <leader>` :call OpenTerminal()<CR>
 
+" Find files using Telescope command-line sugar.
+nnoremap <leader>ff <cmd>Telescope find_files<cr>
+nnoremap <leader>fg <cmd>Telescope live_grep<cr>
+nnoremap <leader>fb <cmd>Telescope buffers<cr>
+nnoremap <leader>fh <cmd>Telescope help_tags<cr>
+
 " auto reload vimrc when editin it
 autocmd! BufWritePost .vimrc source ~/.vimrc | echo "source .vimrc"
 
@@ -170,17 +195,10 @@ cnoreabbrev W w
 cnoreabbrev Q q
 cnoreabbrev Qall qall
 
-"" NERDTree configuration
-let g:NERDTreeChDirMode=2
-let g:NERDTreeIgnore=['.git', '\.rbc$', '\~$', '\.pyc$', '\.db$', '\.sqlite$', '__pycache__']
-let g:NERDTreeShowBookmarks=1
-let g:nerdtree_tabs_focus_on_files=1
-let g:NERDTreeMapOpenInTabSilent = '<RightMouse>'
-let NERDTreeWinPos="left"
-let NERDTreeShowHidden=1
-let g:NERDTreeWinSize = 28
-let g:NERDTreeStatusline=1
-set wildignore+=*/tmp/*,*.so,*.swp,*.zip,*.pyc,*.db,*.sqlite
+" Rust.vim Settings
+let g:rustfmt_autosave=1
+" To avoid the conflict between coc and ale
+let g:ale_disable_lsp=1
 
 "" airline status bar setting
 let g:airline_filetype_overrides = {
@@ -189,17 +207,6 @@ let g:airline_filetype_overrides = {
       \ }
 let g:airline#extensions#tabline#enabled = 1
 let g:airline#extensions#tabline#formatter = 'unique_tail_improved'
-
-" fzf config
-" nnoremap <C-p> :FZF<CR>
-" let g:fzf_action = {
-"         \ 'ctrl-t': 'tab split',
-"         \ 'ctrl-s': 'split',
-"         \ 'ctrl-v': 'vsplit'
-"       \ }
-" " ignore all files included in the .gitignore files
-" " ---------
-" let $FZF_DEFAULT_COMMAND = 'rg --files -g ""'
 
 " coc config
 let g:coc_global_extensions = [
@@ -260,8 +267,8 @@ autocmd CursorHold * silent call CocActionAsync('highlight')
 nmap <leader>rn <Plug>(coc-rename)
 
 " Formatting selected code.
-xmap <leader>f  <Plug>(coc-format-selected)
-nmap <leader>f  <Plug>(coc-format-selected)
+xmap <leader>fm  <Plug>(coc-format-selected)
+nmap <leader>fm  <Plug>(coc-format-selected)
 
 augroup mygroup
   autocmd!
@@ -326,18 +333,18 @@ set statusline^=%{coc#status()}%{get(b:,'coc_current_function','')}
 
 " Mappings for CoCList
 " Show all diagnostics.
-nnoremap <silent><nowait> <space>a  :<C-u>CocList diagnostics<cr>
+nnoremap <silent><nowait> <space>al  :<C-u>CocList diagnostics<cr>
 " Manage extensions.
-nnoremap <silent><nowait> <space>e  :<C-u>CocList extensions<cr>
+nnoremap <silent><nowait> <space>ex  :<C-u>CocList extensions<cr>
 " Show commands.
-nnoremap <silent><nowait> <space>c  :<C-u>CocList commands<cr>
+nnoremap <silent><nowait> <space>cm  :<C-u>CocList commands<cr>
 " Find symbol of current document.
-nnoremap <silent><nowait> <space>o  :<C-u>CocList outline<cr>
+nnoremap <silent><nowait> <space>oo  :<C-u>CocList outline<cr>
 " Search workspace symbols.
-nnoremap <silent><nowait> <space>s  :<C-u>CocList -I symbols<cr>
+nnoremap <silent><nowait> <space>sb  :<C-u>CocList -I symbols<cr>
 " Do default action for next item.
-nnoremap <silent><nowait> <space>j  :<C-u>CocNext<CR>
+nnoremap <silent><nowait> <space>jj  :<C-u>CocNext<CR>
 " Do default action for previous item.
-nnoremap <silent><nowait> <space>k  :<C-u>CocPrev<CR>
+nnoremap <silent><nowait> <space>kk  :<C-u>CocPrev<CR>
 " Resume latest coc list.
-nnoremap <silent><nowait> <space>p  :<C-u>CocListResume<CR>
+nnoremap <silent><nowait> <space>lr  :<C-u>CocListResume<CR>
