@@ -21,6 +21,9 @@ Plug 'gruvbox-community/gruvbox'
 
 " Easy Motion
 Plug 'easymotion/vim-easymotion'
+Plug 'haya14busa/incsearch.vim'
+Plug 'haya14busa/incsearch-easymotion.vim'
+Plug 'haya14busa/incsearch-fuzzy.vim'
 
 " Telescope
 Plug 'nvim-lua/plenary.nvim'
@@ -127,16 +130,36 @@ endif
 colorscheme gruvbox
 
 " Mappings
-let g:EasyMotion_do_mapping = 0 " Disable default mappings
-let g:EasyMotion_leader_key = "<Leader>/"
+let g:EasyMotion_do_mapping = 1 " Disable default mappings
+let g:EasyMotion_leader_key = "<Leader>"
 let g:EasyMotion_smartcase = 1  " Turn on case-insensitive feature
 nmap s <Plug>(easymotion-overwin-f2)
-"" Move to line
-map <leader><leader>jl <Plug>(easymotion-bd-jk)
-nmap <leader><leader>jl <Plug>(easymotion-overwin-line)
-"" Move to word
-map  <leader><leader>jw <Plug>(easymotion-bd-w)
-nmap <leader><leader>jw <Plug>(easymotion-overwin-w)
+" You can use other keymappings like <C-l> instead of <CR> if you want to
+" use these mappings as default search and sometimes want to move cursor with
+" EasyMotion.
+function! s:incsearch_config(...) abort
+  return incsearch#util#deepextend(deepcopy({
+  \   'modules': [incsearch#config#easymotion#module({'overwin': 1})],
+  \   'keymap': {
+  \     "\<CR>": '<Over>(easymotion)'
+  \   },
+  \   'is_expr': 0
+  \ }), get(a:, 1, {}))
+endfunction
+noremap <silent><expr> /  incsearch#go(<SID>incsearch_config())
+noremap <silent><expr> ?  incsearch#go(<SID>incsearch_config({'command': '?'}))
+noremap <silent><expr> g/ incsearch#go(<SID>incsearch_config({'is_stay': 1}))
+" incsearch.vim x fuzzy x vim-easymotion
+function! s:config_easyfuzzymotion(...) abort
+  return extend(copy({
+  \   'converters': [incsearch#config#fuzzyword#converter()],
+  \   'modules': [incsearch#config#easymotion#module({'overwin': 1})],
+  \   'keymap': {"\<CR>": '<Over>(easymotion)'},
+  \   'is_expr': 0,
+  \ }), get(a:, 1, {}))
+endfunction
+
+noremap <silent><expr> <Space>/ incsearch#go(<SID>config_easyfuzzymotion())
 " Remap the ESC
 inoremap jj <ESC>
 " With a map leader it is possible to do extra key combinations
