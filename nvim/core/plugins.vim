@@ -20,12 +20,18 @@ let g:NERDToggleCheckAllLines = 1
 """""""" telescope
 " Find files using Telescope command-line sugar.
 nnoremap <leader>ff <cmd>Telescope find_files<cr>
+nnoremap <leader>fn <cmd>Telescope node_modules list<cr>
 nnoremap <C-p> <cmd>Telescope git_files<cr>
 nnoremap <leader>fg <cmd>Telescope live_grep<cr>
 nnoremap <leader>fb <cmd>Telescope buffers<cr>
 nnoremap <leader>fh <cmd>Telescope help_tags<cr>
 nnoremap <leader>fo <cmd>Telescope oldfiles<cr>
 nnoremap <leader>* <cmd>Telescope grep_string<cr>
+
+"""""""" vim-sandwich
+" using sandwich with vim-surround keymappings
+" https://github.com/machakann/vim-sandwich/wiki/Introduce-vim-surround-keymappings
+runtime marcors/sandwich/keymap/surround.vim
 
 """""""" bufferline
 " These commands will navigate through buffers in order regardless of which mode you are using

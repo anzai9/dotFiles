@@ -67,7 +67,7 @@ nvim_tree.setup({
   },
   filters = {
     dotfiles = false,
-    custom = {},
+    custom = { "^.git$" },
     exclude = {},
   },
   git = {
@@ -113,7 +113,7 @@ nvim_tree.setup({
   },
 })
 
-vim.keymap.set('n', '<space>n', function()
+vim.keymap.set('n', '<space>t', function()
   return require('nvim-tree').toggle(false, true)
 end,
 { noremap = true, silent = true, desc = "toggle nvim-tree"})

@@ -19,8 +19,12 @@ return require('packer').startup(function(use)
   -- Telescope
   use {
     'nvim-telescope/telescope.nvim', tag = '0.1.0',
-    requires = { {'nvim-lua/plenary.nvim'} }
+    requires = { 
+      'nvim-lua/plenary.nvim',
+      'nvim-telescope/telescope-node-modules.nvim',
+    }
   }
+  use {'nvim-telescope/telescope-fzf-native.nvim', run = 'make' }
 
   -- cmd autocomplete
   use 'gelguy/wilder.nvim'
@@ -45,8 +49,8 @@ return require('packer').startup(function(use)
 
   -- statusline
   use {
-  'nvim-lualine/lualine.nvim',
-  requires = { 'kyazdani42/nvim-web-devicons', opt = true }
+    'nvim-lualine/lualine.nvim',
+     requires = { 'kyazdani42/nvim-web-devicons', opt = true }, 
   }
 
   -- buffer line
@@ -54,9 +58,16 @@ return require('packer').startup(function(use)
 
   -- git integration
   use {
+    'TimUntersberger/neogit', 
+    requires = {
+      'nvim-lua/plenary.nvim',
+    }
+  }
+  use {
     'lewis6991/gitsigns.nvim',
     tag = 'release' -- To use the latest release
   }
+  use 'sindrets/diffview.nvim'  
 
   -- indent
   use 'lukas-reineke/indent-blankline.nvim'

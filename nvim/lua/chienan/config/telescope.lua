@@ -2,8 +2,19 @@ local actions = require('telescope.actions')
 
 require('telescope').setup{
   defaults = {
-    -- Default configuration for telescope goes here:
-    -- config_key = value,
+    path_display = {
+      shorten = { len = 3, exclude = { 1, -1 }}
+    },
+    vimgrep_arguments = {
+      "rg",
+      "--color=never",
+      "--no-heading",
+      "--with-filename",
+      "--line-number",
+      "--column",
+      "--smart-case",
+      "--trim",
+    },
     mappings = {
       i = {
         -- map actions.which_key to <C-h> (default: <C-/>)
@@ -11,6 +22,7 @@ require('telescope').setup{
         -- e.g. git_{create, delete, ...}_branch for the git_branches picker
         ["<C-j>"] = actions.move_selection_next,
         ["<C-k>"] = actions.move_selection_previous,
+        ["<esc>"] = actions.close,
       }
     }
   },
@@ -24,10 +36,13 @@ require('telescope').setup{
     -- builtin picker
   },
   extensions = {
-    -- Your extension configuration goes here:
-    -- extension_name = {
-    --   extension_config_key = value,
-    -- }
-    -- please take a look at the readme of the extension you want to configure
+    fzf = {
+      fuzzy = true,
+      override_generic_sorter = ture,
+      override_file_sorter = ture,
+      case_mode = "smart_case",
+    }
   }
 }
+
+require("telescope").load_extension("node_modules")

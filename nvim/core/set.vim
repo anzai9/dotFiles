@@ -1,6 +1,8 @@
 " General Settings
 syntax enable
 filetype plugin indent on
+" fix the statusline
+set laststatus=3
 " set space for indentline
 set tabstop=2
 set expandtab
