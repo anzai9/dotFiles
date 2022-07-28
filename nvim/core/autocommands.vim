@@ -61,4 +61,4 @@ augroup start_terminal_in_insert_mode
   autocmd!
   autocmd BufEnter * if &buftype == 'terminal' | :startinsert | endif
 augroup END
- 
+
