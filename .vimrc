@@ -43,10 +43,11 @@ Plug 'mg979/vim-visual-multi', {'branch': 'master'}
 Plug 'mbbill/undotree'
 
 " git
-Plug 'tpope/vim-fugitive'
+Plug 'lewis6991/gitsigns.nvim'
 
 " commenter
 Plug 'preservim/nerdcommenter'
+Plug 'machakann/vim-sandwich'
 
 " replace copy behavior on all delete action
 Plug 'tpope/vim-repeat'
@@ -54,10 +55,22 @@ Plug 'svermeulen/vim-easyclip'
 
 " Help escape insert mode quickly
 Plug 'jdhao/better-escape.vim'
+
+" Indent decoration
+Plug 'lukas-reineke/indent-blankline.nvim'
+
+" displays a popup with possible key bindings of cmd
+Plug 'folke/which-key.nvim'
 call plug#end()
 " General Settings
 syntax enable
 filetype plugin indent on
+" set space for indentline
+set tabstop=2
+set expandtab
+set autoindent " Note: 'smartindent' is deprecated by 'cindnet' and 'indentexpr'
+" set the space of indent
+set shiftwidth=2
 set exrc
 set clipboard+=unnamedplus
 set history=50
@@ -69,7 +82,6 @@ set foldcolumn=1
 set wildmenu " vim c-mode auto completion suggestion
 let $LANG='en'
 set langmenu=en
-set bs=2
 set fileencoding=utf-8
 set fileencodings=utf-8
 set ffs=unix,dos,mac
@@ -77,13 +89,13 @@ set textwidth=80
 set noerrorbells
 set wrap
 set colorcolumn=80
+set ignorecase
+set smartcase
 " Highlight the row and column
 set cursorline
-" Fix backspace indent
-set backspace=indent,eol,start
 " A buffer becomes hidden when it is abandoned
 set hidden
-" Highlight search results
+" disalbe highlight search results
 set nohlsearch
 " Makes search act like search in modern browsers
 set incsearch
@@ -91,15 +103,11 @@ set incsearch
 set magic
 " Show matching brackets when text indicator is over them
 set showmatch
-set smartindent " smart about indent
 " Turn backup off, since most stuff is in SVN, git et.c anyway...
 set nobackup
-set nowb
 set noswapfile
-set shiftwidth=4
-set tabstop=4
-set showcmd " retain command
-set expandtab " always uses spaces insaed of tab characters
+" retain command
+set showcmd 
 " open new split panels to right and below
 set splitright
 set splitbelow
@@ -112,9 +120,6 @@ set undolevels=10000
 " Set internal encoding of vim, not needed on neovim, since coc.nvim using some
 " unicode characters in the file autoload/float.vim
 set encoding=utf-8
-" Some servers have issues with backup files, see #649.
-set nobackup
-set nowritebackup
 " Give more space for displaying messages.
 set cmdheight=2
 " Having longer updatetime (default is 4000 ms = 4 s) leads to noticeable
@@ -122,6 +127,8 @@ set cmdheight=2
 set updatetime=50
 " Don't pass messages to |ins-completion-menu|.
 set shortmess+=c
+" set the backspace can delete characters in insert mode
+set backspace=indent,eol,start
 " Always show the signcolumn, otherwise it would shift the text each time
 " diagnostics appear/become resolved.
 if has("nvim-0.5.0") || has("patch-8.1.1564")
@@ -137,16 +144,20 @@ endif
 colorscheme gruvbox
 
 " Mappings
-" better-escape
+ 
+"" better-escape
 let g:better_escape_shortcut = 'jj'
-let g:better_escape_interval = 100
-" easyclip
+let g:better_escape_interval = 200
+" let g:better_escape_debug = 1
+
+"" easyclip
 let g:EasyClipAutoFormat = 1
 let g:EasyClipAlwaysMoveCursorToEndOfPaste = 1
 let g:EasyClipPreserveCursorPositionAfterYank = 1
 let g:EasyClipShareYanks = 1
-let g:EasyClipShareYanksDirectory = "/Users/jianan_wang/.config/nvim"
-" easymotion
+let g:EasyClipShareYanksDirectory = "~/.config/nvim"
+
+"" easymotion
 let g:EasyMotion_do_mapping = 1 " Disable default mappings
 let g:EasyMotion_leader_key = "<Leader>"
 let g:EasyMotion_smartcase = 1  " Turn on case-insensitive feature
@@ -176,6 +187,14 @@ function! s:config_easyfuzzymotion(...) abort
   \ }), get(a:, 1, {}))
 endfunction
 noremap <silent><expr> <Space>/ incsearch#go(<SID>config_easyfuzzymotion())
+
+"" nerdcommenter
+let g:NERDSpaceDelims = 1
+let g:NERDCompaceSexyComs = 1
+let g:NERDCommentEmptyLines = 1
+let g:NERDTrimTrailingWhitespace = 1
+let g:NERDToggleCheckAllLines = 1
+
 " With a map leader it is possible to do extra key combinations
 let mapleader = " "
 " Fast saving
@@ -187,13 +206,6 @@ map <leader>, :bprev<cr>
 nnoremap <leader>u :MundoToggle<CR>
 " NERDTree toggle
 nnoremap <leader>t :NERDTreeToggle<CR>
-" Git
-nnoremap <leader>gs :Gstatus<CR>
-nnoremap <leader>gc :Gcommit<CR>
-nnoremap <leader>ga :Gwrite<CR>
-nnoremap <leader>gb :Bblame<CR>
-nnoremap <leader>gll :Gpull<CR>
-nnoremap <leader>gd :Gvdiff<CR>
 " Split
 nnoremap <leader>h :<C-u>split<CR>
 nnoremap <leader>v :<C-u>vsplit<CR>
@@ -213,9 +225,12 @@ nnoremap <leader>` :call OpenTerminal()<CR>
 
 " Find files using Telescope command-line sugar.
 nnoremap <leader>ff <cmd>Telescope find_files<cr>
+nnoremap <C-p> <cmd>Telescope git_files<cr>
 nnoremap <leader>fg <cmd>Telescope live_grep<cr>
 nnoremap <leader>fb <cmd>Telescope buffers<cr>
 nnoremap <leader>fh <cmd>Telescope help_tags<cr>
+nnoremap <leader>fo <cmd>Telescope oldfiles<cr>
+nnoremap <leader>* <cmd>Telescope grep_string<cr>
 
 " auto reload vimrc when editin it
 autocmd! BufWritePost .vimrc source ~/.vimrc | echo "source .vimrc"
@@ -265,16 +280,12 @@ inoremap <silent><expr> <TAB>
        \ <SID>check_back_space() ? "\<TAB>" :
        \ coc#refresh()
 inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
- 
+inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
 function! s:check_back_space() abort
   let col = col('.') - 1
   return !col || getline('.')[col - 1]  =~# '\s'
 endfunction
 
-" Make <CR> auto-select the first completion item and notify coc.nvim to
-" format on enter, <cr> could be remapped by other vim plugin
-" inoremap <silent><expr> <cr> pumvisible() ? coc#_select_confirm()
- 
 " Use `[g` and `]g` to navigate diagnostics
 " Use `:CocDiagnostics` to get all diagnostics of current buffer in location list.
 nmap <silent> [g <Plug>(coc-diagnostic-prev)
