@@ -31,7 +31,10 @@ nnoremap <leader>* <cmd>Telescope grep_string<cr>
 """""""" vim-sandwich
 " using sandwich with vim-surround keymappings
 " https://github.com/machakann/vim-sandwich/wiki/Introduce-vim-surround-keymappings
-runtime marcors/sandwich/keymap/surround.vim
+" runtime marcors/sandwich/keymap/surround.vim
+
+"""""""" neogit
+nnoremap <leader>gs <cmd>Neogit<cr>
 
 """""""" bufferline
 " These commands will navigate through buffers in order regardless of which mode you are using
