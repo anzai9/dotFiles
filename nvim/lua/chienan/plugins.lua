@@ -11,6 +11,8 @@ return require('packer').startup(function(use)
   use 'wbthomason/packer.nvim'
   
   use {'neoclide/coc.nvim', branch = 'release'}
+
+  use {'lewis6991/impatient.nvim'}
   
   
   -- Telescope
