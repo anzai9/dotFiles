@@ -12,10 +12,7 @@ return require('packer').startup(function(use)
   
   use {'neoclide/coc.nvim', branch = 'release'}
   
-  -- Colorscheme section
-  use("gruvbox-community/gruvbox")
-  use("folke/tokyonight.nvim")
-
+  
   -- Telescope
   use {
     'nvim-telescope/telescope.nvim', tag = '0.1.0',
@@ -107,6 +104,16 @@ return require('packer').startup(function(use)
     'nvim-treesitter/nvim-treesitter',
     run = function() require('nvim-treesitter.install').update({ with_sync = true }) end,
   }
+  
+  -- theme
+  use {
+    'goolord/alpha-nvim',
+    requires = { 'kyazdani42/nvim-web-devicons' },
+  }
+  -- Colorscheme section
+  use("gruvbox-community/gruvbox")
+  use("folke/tokyonight.nvim")
+
   -- Automatically set up your configuration after cloning packer.nvim
   -- Put this at the end after all plugins
   if packer_bootstrap then

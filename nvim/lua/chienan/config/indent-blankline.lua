@@ -4,7 +4,7 @@ require("indent_blankline").setup({
   char = "|",
   show_end_of_line = false,
   disable_with_nolist = true,
-  buftype_exclude = { "terminal" },
+  buftype_exclude = { "terminal", "nofile" },
   filetype_exclude = { "help", "git", "markdown", "snippets", "text", "gitconfig", "alpha" },
 })
 
@@ -16,7 +16,7 @@ function! Should_activate_indentblankline() abort
 endfunction
 augroup indent_blankline
   autocmd!
-  autocmd InsertEnter * IndentBlanklineDisable
-  autocmd BufEnter,InsertLeave * call Should_activate_indentblankline()
+  autocmd InsertEnter * call Should_activate_indentblankline()
+  autocmd InsertLeave * call Should_activate_indentblankline()
 augroup END
 ]])
