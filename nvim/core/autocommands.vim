@@ -62,3 +62,7 @@ augroup start_terminal_in_insert_mode
   autocmd BufEnter * if &buftype == 'terminal' | :startinsert | endif
 augroup END
 
+augroup auto_open_fold
+  autocmd!
+  autocmd BufReadPost,FileReadPost * normal zR
+augroup
