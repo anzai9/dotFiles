@@ -68,6 +68,13 @@ return require('packer').startup(function(use)
     tag = 'release' -- To use the latest release
   }
   use 'sindrets/diffview.nvim'  
+  use {
+    'akinsho/git-conflict.nvim',
+    config = function()
+      require('git-conflict').setup()
+    end,
+  }
+  
 
   -- indent
   use 'lukas-reineke/indent-blankline.nvim'

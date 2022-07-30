@@ -49,7 +49,7 @@ augroup END
 " Auto-generate packer_compiled.lua file
 augroup packer_auto_compile
   autocmd!
-  autocmd BufWritePost */nvim/lua/plugins.lua source <afile> | PackerCompile
+  autocmd BufWritePost */nvim/lua/chienan/plugins.lua source <afile> | PackerCompile
 augroup END
 
 augroup auto_create_dir
