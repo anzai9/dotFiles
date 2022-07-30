@@ -33,8 +33,8 @@ set smartcase
 set cursorline
 " A buffer becomes hidden when it is abandoned
 set hidden
-" disalbe highlight search results
-set nohlsearch
+" highlight search results
+set hlsearch
 " Makes search act like search in modern browsers
 set incsearch
 " For regular expressions turn magic on

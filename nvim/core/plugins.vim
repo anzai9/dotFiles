@@ -1,6 +1,6 @@
 """""""""" better-escape
 let g:better_escape_shortcut = 'jj'
-let g:better_escape_interval = 200
+let g:better_escape_interval = 300
 " let g:better_escape_debug = 1
 
 """""""" easyclip
