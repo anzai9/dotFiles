@@ -36,6 +36,11 @@ nnoremap <leader>* <cmd>Telescope grep_string<cr>
 """""""" neogit
 nnoremap <leader>gs <cmd>Neogit<cr>
 
+"""""""" easymotion
+map  / <Plug>(easymotion-sn)
+omap / <Plug>(easymotion-tn)
+let g:EasyMotion_smartcase = 1
+
 """""""" bufferline
 " These commands will navigate through buffers in order regardless of which mode you are using
 " e.g. if you change the order of buffers :bnext and :bprevious will not respect the custom ordering

@@ -38,3 +38,6 @@ function  s:open_terminal()
  resize 10
 endfunction
 nnoremap <leader>` :call s:open_terminal()<CR>
+
+nnoremap <leader>zr :normal zR<CR>
+nnoremap <leader>zc :normal zc<CR>
