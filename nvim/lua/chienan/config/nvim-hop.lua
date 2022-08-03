@@ -8,5 +8,5 @@ hop.setup({
 })
 
 nnoremap("s", function()
-  return hop.hint_char2()
-end, { silent =true, desc = "nvim-hop char2" })
+  return hop.hint_char1()
+end, { silent =true, desc = "nvim-hop char1" })

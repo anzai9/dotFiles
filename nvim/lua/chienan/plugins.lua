@@ -93,6 +93,9 @@ return require('packer').startup(function(use)
     'phaazon/hop.nvim',
     branch = 'v2', -- optional but strongly recommended
   }
+  use {
+    'easymotion/vim-easymotion',
+  }
   -- comment tool 
   use 'preservim/nerdcommenter'
   
