@@ -1,6 +1,9 @@
 " General Settings
 syntax enable
 filetype plugin indent on
+" use vim settins, rather than vi settings
+" this must be first, because it changes other options as a side effect
+set nocompatible
 " fix the statusline
 set laststatus=3
 " set space for indentline

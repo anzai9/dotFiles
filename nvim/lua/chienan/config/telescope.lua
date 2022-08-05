@@ -23,7 +23,6 @@ require('telescope').setup{
         ["<C-j>"] = actions.move_selection_next,
         ["<C-k>"] = actions.move_selection_previous,
         ["<esc>"] = actions.close,
-        ["d"] = "delete_buffer",
       }
     }
   },
@@ -35,6 +34,13 @@ require('telescope').setup{
     -- }
     -- Now the picker_config_key will be applied every time you call this
     -- builtin picker
+    buffers = {
+      mappings = {
+        i = {
+          ["dd"] = "delete_buffer",
+        }
+      }
+    }
   },
   extensions = {
     fzf = {
@@ -43,7 +49,7 @@ require('telescope').setup{
       override_file_sorter = ture,
       case_mode = "smart_case",
     }
-  }
+  },
 }
 
 require("telescope").load_extension("node_modules")
