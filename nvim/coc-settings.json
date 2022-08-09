@@ -1,6 +1,13 @@
 {
   "semanticTokens.filetypes": ["*"],
-  "diagnostic.displayByAle": true,
+  "codeLens.enable": true,
+  "diagnostic.errorSign": "✘",
+  "diagnostic.warningSign": "",
+  "diagnostic.infoSign": "",
+  "diagnostic.enableMessage": "jump",
+  "diagnostic.virtualText": true,
+  "diagnostic.virtualTextCurrentLineOnly": false,
+  "Lua.diagnostics.globals": ["use", "vim"],
   "coc.preferences.formatOnSaveFiletypes": [
     "javascript",
     "javascriptreact",
@@ -19,6 +26,7 @@
   },
   "eslint.autoFixOnSave": true,
   "tsserver.formatOnType": true,
+  "tsserver.enableJavascript": true,
   "coc.preferences.formatOnType": true,
   "javascript.suggestionActions.enabled": false
 }
