@@ -7,6 +7,6 @@ hop.setup({
   quit_key='<Esc>',
 })
 
-nnoremap("s", function()
+nnoremap("f", function()
   return hop.hint_char1()
 end, { silent =true, desc = "nvim-hop char1" })
