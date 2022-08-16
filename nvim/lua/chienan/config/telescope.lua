@@ -105,6 +105,7 @@ require('telescope').setup{
 }
 
 require("telescope").load_extension("node_modules")
+require("telescope").load_extension("harpoon")
 
 -- fallback to find_files while the git_files cannot find a .git directory
 nnoremap("<C-p>", "<CMD> lua require('chienan.config.telescope').project_files()<CR>", { silent = true })

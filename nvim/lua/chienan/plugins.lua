@@ -9,16 +9,15 @@ end
 return require('packer').startup(function(use)
   -- Packer can manage itself
   use 'wbthomason/packer.nvim'
-  
+
   use {'neoclide/coc.nvim', branch = 'release'}
 
   use {'lewis6991/impatient.nvim'}
-  
-  
+
   -- Telescope
   use {
     'nvim-telescope/telescope.nvim', tag = '0.1.0',
-    requires = { 
+    requires = {
       'nvim-lua/plenary.nvim',
       'nvim-telescope/telescope-node-modules.nvim',
     }
@@ -49,7 +48,7 @@ return require('packer').startup(function(use)
   -- statusline
   use {
     'nvim-lualine/lualine.nvim',
-     requires = { 'kyazdani42/nvim-web-devicons', opt = true }, 
+     requires = { 'kyazdani42/nvim-web-devicons', opt = true },
   }
 
   -- buffer line
@@ -57,7 +56,7 @@ return require('packer').startup(function(use)
 
   -- git integration
   use {
-    'TimUntersberger/neogit', 
+    'TimUntersberger/neogit',
     requires = {
       'nvim-lua/plenary.nvim',
     }
@@ -66,14 +65,15 @@ return require('packer').startup(function(use)
     'lewis6991/gitsigns.nvim',
     tag = 'release' -- To use the latest release
   }
-  use 'sindrets/diffview.nvim'  
+  use 'sindrets/diffview.nvim'
   use {
     'akinsho/git-conflict.nvim',
     config = function()
       require('git-conflict').setup()
     end,
   }
-  
+
+  use 'ThePrimeagen/harpoon'
 
   -- indent
   use 'lukas-reineke/indent-blankline.nvim'
@@ -87,7 +87,7 @@ return require('packer').startup(function(use)
   -- replace copy actions by delete using m to replace d
   use 'tpope/vim-repeat'
   use 'svermeulen/vim-easyclip'
-  
+
   -- easymotion
   use {
     'phaazon/hop.nvim',
@@ -96,20 +96,20 @@ return require('packer').startup(function(use)
   use {
     'easymotion/vim-easymotion',
   }
-  -- comment tool 
+  -- comment tool
   use 'preservim/nerdcommenter'
-  
+
   -- undo
   use 'mbbill/undotree'
-  
+
   use 'terryma/vim-multiple-cursors'
-  
+
   -- better syntax highlight
   use {
     'nvim-treesitter/nvim-treesitter',
     run = function() require('nvim-treesitter.install').update({ with_sync = true }) end,
   }
-  
+
   -- theme
   use {
     'goolord/alpha-nvim',
