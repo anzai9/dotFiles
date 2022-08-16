@@ -74,6 +74,7 @@ return require('packer').startup(function(use)
   }
 
   use 'ThePrimeagen/harpoon'
+  use 'ThePrimeagen/git-worktree.nvim'
 
   -- indent
   use 'lukas-reineke/indent-blankline.nvim'

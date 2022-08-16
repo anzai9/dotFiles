@@ -2,7 +2,7 @@ local nnoremap = require("chienan.utils").nnoremap
 
 local silent = { silent = true }
 
-nnoremap("<leader>;", function() require("harpoon.mark").add_file() end, silent)
+nnoremap("<leader>;", function() require("harpoon.mark").add_file() end)
 nnoremap("<leader>tc", function () require("harpoon.cmd-ui").toggle_quick_menu() end, silent)
 nnoremap("<C-e>", "<cmd>Telescope harpoon marks<cr>", silent)
 
