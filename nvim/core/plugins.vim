@@ -39,6 +39,7 @@ nnoremap <leader>gs <cmd>Neogit<cr>
 map  / <Plug>(easymotion-sn)
 omap / <Plug>(easymotion-tn)
 let g:EasyMotion_smartcase = 1
+let g:EasyMotion_do_mapping = 0
 
 """""""" bufferline
 " These commands will navigate through buffers in order regardless of which mode you are using
