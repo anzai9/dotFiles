@@ -39,6 +39,7 @@ nnoremap <leader>gs <cmd>Neogit<cr>
 map  / <Plug>(easymotion-sn)
 omap / <Plug>(easymotion-tn)
 let g:EasyMotion_smartcase = 1
+let g:EasyMotion_do_mapping = 0
 
 """""""" bufferline
 " These commands will navigate through buffers in order regardless of which mode you are using
@@ -77,6 +78,10 @@ let g:coc_global_extensions = [
   \ 'coc-html',
   \ 'coc-emmet'
   \ ]
+let g:coc_filetype_map = { 
+   \ 'javascript': 'javascriptreact',
+   \ 'javascript.jsx': 'javascriptreact',
+   \ }
 
 " Use tab for trigger completion with characters ahead and navigate.
 " NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by

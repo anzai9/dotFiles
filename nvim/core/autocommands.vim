@@ -62,7 +62,8 @@ augroup start_terminal_in_insert_mode
   autocmd BufEnter * if &buftype == 'terminal' | :startinsert | endif
 augroup END
 
-augroup auto_open_fold
+augroup easymotion_coc_conflict
   autocmd!
-  autocmd BufReadPost,FileReadPost * normal zR
-augroup
+  autocmd User EasyMotionPromptBegin silent! CocDisable
+  autocmd User EasyMotionPromptEnd silent! CocEnabble
+augroup END

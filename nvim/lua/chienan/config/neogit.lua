@@ -1,5 +1,4 @@
 local neogit = require("neogit")
-local nnoremap = require("chienan.utils").nnoremap
 
 neogit.setup {
   disable_commit_confirmation = true,

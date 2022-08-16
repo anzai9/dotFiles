@@ -20,7 +20,7 @@ nnoremap <silent> <leader>q :<C-U>x<CR>
 nnoremap <silent> <leader>Q :<C-U>qa!<CR>
 " Close a buffer and switching to another buffer, do not close the
 " window, see https://stackoverflow.com/q/4465095/6064933
-nnoremap <silent> \d :<C-U>bprevious <bar> bdelete #<CR>
+nnoremap <silent> <leader>x :<C-U>bprevious <bar> bdelete #<CR>
 " Move among buffers with mapleader"
 map <leader>. :bnext<cr>
 map <leader>, :bprev<cr>
