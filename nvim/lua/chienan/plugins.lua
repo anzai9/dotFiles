@@ -83,7 +83,7 @@ return require('packer').startup(function(use)
   use {'machakann/vim-sandwich', event = 'VimEnter'}
 
   -- Escape insert mode more efficiently
-  use {'jdhao/better-escape.vim', event = 'InsertEnter'}
+  use {'max397574/better-escape.nvim'}
 
   -- replace copy actions by delete using m to replace d
   use 'tpope/vim-repeat'

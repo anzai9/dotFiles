@@ -67,3 +67,12 @@ augroup easymotion_coc_conflict
   autocmd User EasyMotionPromptBegin silent! CocDisable
   autocmd User EasyMotionPromptEnd silent! CocEnabble
 augroup END
+
+augroup remove_extra_whitespace
+  match ExtraWhitespace /\s\+$/
+  autocmd!
+  autocmd BufWinEnter * match ExtraWhitespace /\s\+$/
+  autocmd InsertEnter * match ExtraWhitespace /\s\+\%#\@<!>$/
+  autocmd InsertLeave * match ExtraWhitespace /\s\+$/
+  autocmd BufWinLeave * call clearmatches()
+augroup END
