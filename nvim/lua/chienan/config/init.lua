@@ -1,5 +1,6 @@
 local path = "chienan.config."
 require(path .. "alpha")
+require(path .. "better_escape")
 require(path .. "bufferline")
 require(path .. "gitsigns")
 require(path .. "indent-blankline")

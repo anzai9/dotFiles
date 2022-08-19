@@ -1,8 +1,3 @@
-"""""""""" better-escape
-let g:better_escape_shortcut = 'jj'
-let g:better_escape_interval = 300
-" let g:better_escape_debug = 1
-
 """""""" easyclip
 let g:EasyClipAutoFormat = 1
 let g:EasyClipAlwaysMoveCursorToEndOfPaste = 1
@@ -26,11 +21,6 @@ nnoremap <leader>fb <cmd>Telescope buffers<cr>
 nnoremap <leader>fh <cmd>Telescope help_tags<cr>
 nnoremap <leader>fo <cmd>Telescope oldfiles<cr>
 nnoremap <leader>* <cmd>Telescope grep_string<cr>
-
-"""""""" vim-sandwich
-" using sandwich with vim-surround keymappings
-" https://github.com/machakann/vim-sandwich/wiki/Introduce-vim-surround-keymappings
-" runtime marcors/sandwich/keymap/surround.vim
 
 """""""" neogit
 nnoremap <leader>gs <cmd>Neogit<cr>
