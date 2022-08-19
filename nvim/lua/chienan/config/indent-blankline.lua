@@ -1,8 +1,12 @@
+vim.opt.list = true
+vim.opt.listchars:append "eol:↴"
 require("indent_blankline").setup({
   -- U+2502 may also be a good choice, it will be on the middle of cursor.
   -- U+250A is also a good choice
   char = "|",
-  show_end_of_line = false,
+  show_current_context = true,
+  show_current_context_start = true,
+  show_end_of_line = true,
   disable_with_nolist = true,
   buftype_exclude = { "terminal", "nofile" },
   filetype_exclude = { "help", "git", "markdown", "snippets", "text", "gitconfig", "alpha" },
