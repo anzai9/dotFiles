@@ -64,9 +64,7 @@ let g:coc_global_extensions = [
   \ 'coc-eslint', 
   \ 'coc-prettier', 
   \ 'coc-json', 
-  \ 'coc-css',
-  \ 'coc-html',
-  \ 'coc-emmet'
+  \ 'coc-snippets',
   \ ]
 let g:coc_filetype_map = { 
    \ 'javascript': 'javascriptreact',
