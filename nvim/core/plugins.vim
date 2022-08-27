@@ -75,12 +75,13 @@ let g:coc_filetype_map = {
 " NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
 " other plugin before putting this into your config.
 inoremap <silent><expr> <TAB>
-       \ pumvisible() ? "\<C-n>" :
-       \ <SID>check_back_space() ? "\<TAB>" :
+       \ coc#pum#visible() ? coc#pum#next(1) :
+       \ CheckBackspace() ? "\<Tab>" :
        \ coc#refresh()
-inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
-inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
-function! s:check_back_space() abort
+inoremap <expr><S-TAB> coc#pum#visible() ? coc#pum#prev(1) : "\<C-h>"
+" Ctrl + k to confrim the completion list selection
+inoremap <silent><expr> <C-k> coc#pum#visible() && coc#pum#info()['index'] != -1 ? coc#pum#confirm() : "\<C-g>u\<CR>\<c-r>=coc#on_enter()\<CR>"
+function! CheckBackspace() abort
   let col = col('.') - 1
   return !col || getline('.')[col - 1]  =~# '\s'
 endfunction
@@ -172,5 +173,7 @@ nnoremap <silent><nowait> <space>al  :<C-u>CocList diagnostics<cr>
 " Find symbol of current document.
 nnoremap <silent><nowait> <space>oo  :<C-u>CocList outline<cr>
 " Search workspace symbols.
-nnoremap <silent><nowait> <space>sb  :<C-u>CocList -I symbols<cr>
+nnoremap <silent><nowait> <space>sb  :<C-u>CocList -I sdmbols<cr>
+" Enable coc
+nnoremap <nowait> <space>rc :CocEnable <cr> | echo "CocEnable done!"
 

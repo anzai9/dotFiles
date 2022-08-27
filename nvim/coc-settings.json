@@ -8,6 +8,8 @@
   "diagnostic.virtualText": true,
   "diagnostic.virtualTextCurrentLineOnly": false,
   "Lua.diagnostics.globals": ["use", "vim"],
+  "suggest.noselect": true,
+  "suggest.enablePreselect": false,
   "coc.preferences.formatOnSaveFiletypes": [
     "javascript",
     "javascriptreact",
