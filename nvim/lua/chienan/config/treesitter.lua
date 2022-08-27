@@ -8,6 +8,7 @@ require("nvim-treesitter.configs").setup {
     "vim",
     "javascript",
     "typescript",
+    "tsx",
     "html",
     "css",
     "yaml",
@@ -16,8 +17,11 @@ require("nvim-treesitter.configs").setup {
     "rust",
     "markdown",
     "graphql",
+    "bash",
   },
   sync_install = false,
+
+  auto_install = true,
 
   highlight = {
     enable = true,
