@@ -8,7 +8,10 @@ brew install zsh tmux git git-extras neovim ripgrep fd
 # install font
 brew tap homebrew/cask-fonts
 brew install --cask font-hack-nerd-font
-# use brew install
+
+# install pynvim for coc
+pip3 install pynvim
+
 # install nvm
 curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.31.7/install.sh | bash
 
@@ -18,16 +21,22 @@ export NVM_DIR="$HOME/.nvm"
 # install stable node
 nvm install stable
 
-# install tpm for tmux
-git clone https://github.com/gpakosz/.tmux.git
-git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
+# install js development tools
+npm -g i jest mermaid
 
-ln -fs "$PWD/vimrc" "$HOME/.vimrc"
-ln -fs "$PWD/nvim" "$HOME/.config/nvim"
-ln -fs "$PWD/.tmux/.tmux.conf" "$HOME/.tmux.conf"
+local CONFIG_PATH = "~/.config"
+
+ln -fs "$PWD/.vimrc" "$HOME/.vimrc"
+ln -fs "$PWD/nvim" "$CONFIG_PATH/nvim"
+ln -fs "$PWD/.tmux.conf" "$HOME/.tmux.conf"
+ln -fs "$PWD/alacritty.yml" "$CONFIG_PATH/alacritty"
+ln -fs "$PWD/.zshrc" "$HOME/.zshrc"
 
 sudo chsh -s $(which zsh)
 
 # install ohmyzsh
 sh -c "$(curl -fsSL
 https://raw.githubusercontent.com/robbyrussell/oh-my-zsh/master/tools/install.sh)"
+
+source ~/.zshrc
+
