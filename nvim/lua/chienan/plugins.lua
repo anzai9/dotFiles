@@ -92,11 +92,12 @@ return require('packer').startup(function(use)
   -- easymotion
   use {
     'phaazon/hop.nvim',
-    branch = 'v2', -- optional but strongly recommended
+    branch = 'v2',
   }
   use {
     'easymotion/vim-easymotion',
   }
+
   -- comment tool
   use 'preservim/nerdcommenter'
 
@@ -116,9 +117,13 @@ return require('packer').startup(function(use)
     'goolord/alpha-nvim',
     requires = { 'kyazdani42/nvim-web-devicons' },
   }
+  use {"norcalli/nvim-colorizer.lua"}
   -- Colorscheme section
   use("gruvbox-community/gruvbox")
   use("folke/tokyonight.nvim")
+
+  use {"windwp/nvim-autopairs"}
+  use {"windwp/nvim-ts-autotag"}
 
   -- Automatically set up your configuration after cloning packer.nvim
   -- Put this at the end after all plugins

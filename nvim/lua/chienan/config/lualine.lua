@@ -72,7 +72,7 @@ insert_left {
   function()
     return '▊'
   end,
-  color = { fg = colors.blue }, 
+  color = { fg = colors.blue },
   padding = { left = 0, right = 1 },
 }
 
@@ -87,7 +87,6 @@ insert_left {
       n = colors.red,
       i = colors.green,
       v = colors.blue,
-      [''] = colors.blue,
       V = colors.blue,
       c = colors.magenta,
       no = colors.red,
@@ -182,7 +181,7 @@ insert_right {
 insert_right {
   'fileformat',
   fmt = string.upper,
-  icons_enabled = true, 
+  icons_enabled = true,
   color = { fg = colors.green, gui = 'bold' },
 }
 
@@ -212,5 +211,5 @@ insert_right {
   padding = { left = 1 },
 }
 
-lualine.setup(config) 
+lualine.setup(config)
 
