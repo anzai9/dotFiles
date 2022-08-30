@@ -175,5 +175,5 @@ nnoremap <silent><nowait> <space>oo  :<C-u>CocList outline<cr>
 " Search workspace symbols.
 nnoremap <silent><nowait> <space>sb  :<C-u>CocList -I sdmbols<cr>
 " Enable coc
-nnoremap <nowait> <space>rc :CocEnable <cr> | echo "CocEnable done!"
+nnoremap <nowait> <space>rc :CocEnable <cr> 
 
