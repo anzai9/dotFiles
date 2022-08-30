@@ -7,6 +7,7 @@
   "diagnostic.enableMessage": "jump",
   "diagnostic.virtualText": true,
   "diagnostic.virtualTextCurrentLineOnly": false,
+  "css.validate": false,
   "Lua.diagnostics.globals": ["use", "vim"],
   "suggest.noselect": true,
   "suggest.enablePreselect": false,
