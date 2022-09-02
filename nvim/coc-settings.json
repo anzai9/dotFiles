@@ -35,9 +35,15 @@
           "directory": "/tmp/ccls"
         }
       }
+    },
+    "bash": {
+      "command": "bash-language-server",
+      "args": ["start"],
+      "filetypes": ["sh"]
     }
   },
   "eslint.autoFixOnSave": true,
+  "eslint.format.enable": true,
   "tsserver.formatOnType": true,
   "tsserver.enableJavascript": true,
   "coc.preferences.formatOnType": true,
