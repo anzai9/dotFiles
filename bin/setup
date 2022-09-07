@@ -29,6 +29,8 @@ local CONFIG_PATH = "~/.config"
 ln -fs "$PWD/.vimrc" "$HOME/.vimrc"
 ln -fs "$PWD/nvim" "$CONFIG_PATH/nvim"
 ln -fs "$PWD/.tmux.conf" "$HOME/.tmux.conf"
+ln -fs "$PWD/.tmux-cheat-languages" "$HOME/.tmux-cheat-languages"
+ln -fs "$PWD/.tmux-cheat-commands" "$HOME/.tmux-cheat-commands"
 ln -fs "$PWD/alacritty.yml" "$CONFIG_PATH/alacritty"
 ln -fs "$PWD/.zshrc" "$HOME/.zshrc"
 

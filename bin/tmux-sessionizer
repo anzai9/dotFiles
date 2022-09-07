@@ -8,7 +8,7 @@ debug () {
 if [[ $# -eq 1 ]]; then
   selected= $1
 else
-  selected=$(fd . ~/personal ~/workspace --min-depth=1 --max-depth=2 --type=directory | fzf)
+  selected=$(fd . ~/personal ~/workspace --min-depth=1 --max-depth=2 --type=directory | fzf --height=100%  --info=inline --layout=reverse)
 fi
 
 if [[ -z ${selected} ]]; then
