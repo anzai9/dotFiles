@@ -28,7 +28,6 @@ set fileencodings=utf-8
 set ffs=unix,dos,mac
 set textwidth=80
 set noerrorbells
-set wrap
 set colorcolumn=80
 set ignorecase
 set smartcase
@@ -71,3 +70,4 @@ set shortmess+=c
 " set the backspace can delete characters in insert mode
 set backspace=indent,eol,start
 colorscheme tokyonight
+set termguicolors

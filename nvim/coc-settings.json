@@ -18,7 +18,8 @@
     "typescriptreact",
     "graphql",
     "json",
-    "lua"
+    "lua",
+    "rust"
   ],
   "languageserver": {
     "graphql": {
@@ -44,8 +45,10 @@
   },
   "eslint.autoFixOnSave": true,
   "eslint.format.enable": true,
-  "tsserver.formatOnType": true,
+  "tsserver.formatOnType": false,
   "tsserver.enableJavascript": true,
   "coc.preferences.formatOnType": true,
-  "javascript.suggestionActions.enabled": false
+  "javascript.suggestionActions.enabled": false,
+  "snippets.ultisnips.pythonPrompt": false,
+  "Lua.telemetry.enable": false
 }
