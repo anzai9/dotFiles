@@ -62,8 +62,7 @@ return require('packer').startup(function(use)
     }
   }
   use {
-    'lewis6991/gitsigns.nvim',
-    tag = 'release' -- To use the latest release
+    'lewis6991/gitsigns.nvim'
   }
   use 'sindrets/diffview.nvim'
   use {
@@ -107,7 +106,7 @@ return require('packer').startup(function(use)
   use 'terryma/vim-multiple-cursors'
 
   -- better syntax highlight
-  use {"nvim-treesitter/nvim-treesitter"}
+  use("nvim-treesitter/nvim-treesitter", {run = "TSUpdate"})
 
   -- theme
   use {
