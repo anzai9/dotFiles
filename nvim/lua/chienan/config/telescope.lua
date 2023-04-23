@@ -6,7 +6,7 @@ local nnoremap = require("chienan.utils").nnoremap
 
 local custom_actions = {}
 
-custom_actions.project_files = function ()
+custom_actions.project_files = function()
   local opts = {}
   local ok = pcall(require("telescope.builtin").git_files, opts)
   if not ok then
@@ -15,7 +15,7 @@ custom_actions.project_files = function ()
 end
 
 -- open multiple files at once
-custom_actions._multiple_open = function (prompt_bufnr, open_cmd)
+custom_actions._multiple_open = function(prompt_bufnr, open_cmd)
   local picker = action_state.get_current_picker(prompt_bufnr)
   local search_res_count = picker.manager:num_results()
   if search_res_count == 0 then
@@ -29,26 +29,26 @@ custom_actions._multiple_open = function (prompt_bufnr, open_cmd)
   vim.cmd("cfdo " .. open_cmd)
 end
 
-custom_actions.multi_selection_open_vsplit = function (prompt_bufnr)
+custom_actions.multi_selection_open_vsplit = function(prompt_bufnr)
   custom_actions._multiple_open(prompt_bufnr, "vsplit")
 end
 
-custom_actions.multi_selection_open_split = function (prompt_bufnr)
+custom_actions.multi_selection_open_split = function(prompt_bufnr)
   custom_actions._multiple_open(prompt_bufnr, "split")
 end
 
-custom_actions.multi_selection_open_tab = function (prompt_bufnr)
+custom_actions.multi_selection_open_tab = function(prompt_bufnr)
   custom_actions._multiple_open(prompt_bufnr, "tabe")
 end
 
-custom_actions.multi_selection_open = function (prompt_bufnr)
+custom_actions.multi_selection_open = function(prompt_bufnr)
   custom_actions._multiple_open(prompt_bufnr, "edit")
 end
 
-require('telescope').setup{
+require('telescope').setup {
   defaults = {
     path_display = {
-      shorten = { len = 3, exclude = { 1, -1 }}
+      shorten = { len = 3, exclude = { 1, -1 } }
     },
     vimgrep_arguments = {
       "rg",
@@ -85,7 +85,7 @@ require('telescope').setup{
     },
     find_files = {
       previewer = false,
-      find_command = { "fd", "--type", "f", "--strip-cwd-prefix" },
+      find_command = { "fd", "--type", "f", "--strip-cwd-prefix", "-H" },
     },
     oldfiles = {
       previewer = false,
@@ -114,4 +114,3 @@ nnoremap("<C-p>", function()
 end, { silent = true })
 
 return custom_actions
-
