@@ -9,7 +9,6 @@ require("nvim-treesitter.configs").setup {
     "vim",
     "javascript",
     "typescript",
-    "tsx",
     "html",
     "css",
     "yaml",

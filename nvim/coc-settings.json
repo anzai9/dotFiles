@@ -43,11 +43,11 @@
       "filetypes": ["sh"]
     }
   },
-  "eslint.autoFixOnSave": true,
-  "eslint.format.enable": true,
+  "eslint.autoFixOnSave": false,
+  "eslint.format.enable": false,
   "tsserver.formatOnType": false,
   "tsserver.enableJavascript": true,
-  "coc.preferences.formatOnType": true,
+  "coc.preferences.formatOnSave": true,
   "javascript.suggestionActions.enabled": false,
   "snippets.ultisnips.pythonPrompt": false,
   "Lua.telemetry.enable": false

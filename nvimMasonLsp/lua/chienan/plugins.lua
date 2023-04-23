@@ -11,7 +11,27 @@ return require('packer').startup(function(use)
   -- Packer can manage itself
   use 'wbthomason/packer.nvim'
 
-  use { 'neoclide/coc.nvim', branch = 'release' }
+  use {
+    'VonHeikemen/lsp-zero.nvim',
+    branch = 'v2.x',
+    requires = {
+      -- LSP Support
+      { 'neovim/nvim-lspconfig' }, -- Required
+      {
+        -- Optional
+        'williamboman/mason.nvim',
+        run = function()
+          pcall(vim.cmd, 'MasonUpdate')
+        end,
+      },
+      { 'williamboman/mason-lspconfig.nvim' }, -- Optional
+
+      -- Autocompletion
+      { 'hrsh7th/nvim-cmp' },     -- Required
+      { 'hrsh7th/cmp-nvim-lsp' }, -- Required
+      { 'L3MON4D3/LuaSnip' },     -- Required
+    }
+  }
 
   use 'nvim-tree/nvim-web-devicons'
 
@@ -42,14 +62,12 @@ return require('packer').startup(function(use)
     end
   }
 
-  -- statusline
+  -- bottom and top statusline
+  use { 'akinsho/bufferline.nvim', tag = "*", requires = 'nvim-tree/nvim-web-devicons' }
   use {
     'nvim-lualine/lualine.nvim',
     requires = { 'kyazdani42/nvim-web-devicons', opt = true },
   }
-
-  -- buffer line
-  use { 'akinsho/bufferline.nvim', tag = 'v2.*', requires = 'kyazdani42/nvim-web-devicons' }
 
   use {
     "folke/trouble.nvim",
@@ -126,24 +144,43 @@ return require('packer').startup(function(use)
   -- folding tool
   use { 'kevinhwang91/nvim-ufo', requires = 'kevinhwang91/promise-async' }
 
-  -- theme
-  use {
-    'goolord/alpha-nvim',
-    requires = { 'kyazdani42/nvim-web-devicons' },
-  }
   use { "norcalli/nvim-colorizer.lua" }
   -- Colorscheme section
-  use("gruvbox-community/gruvbox")
-  use("folke/tokyonight.nvim")
-
+  -- use("gruvbox-community/gruvbox")
+  -- use("folke/tokyonight.nvim")
+  use({
+    'rose-pine/neovim',
+    as = 'rose-pine',
+    config = function()
+      vim.cmd('colorscheme rose-pine')
+    end
+  })
   use { "windwp/nvim-autopairs" }
   use { "windwp/nvim-ts-autotag" }
 
-  -- spell checker
-  use { "lewis6991/spellsitter.nvim" }
-
   -- copilot
-  use { 'github/copilot.vim', branch = 'release' }
+  use {
+    "zbirenbaum/copilot.lua",
+    cmd = "Copilot",
+    event = "InsertEnter",
+    config = function()
+      require("copilot").setup({
+        panel = {
+          enabled = false
+        },
+        suggestion = {
+          enabled = false,
+        }
+      })
+    end,
+  }
+  use {
+    "zbirenbaum/copilot-cmp",
+    after = { "copilot.lua" },
+    config = function()
+      require("copilot_cmp").setup()
+    end
+  }
 
   -- Automatically set up your configuration after cloning packer.nvim
   -- Put this at the end after all plugins

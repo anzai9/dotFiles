@@ -1,21 +1,35 @@
+local builtin = require('telescope.builtin')
 local actions = require('telescope.actions')
 local action_layout = require('telescope.actions.layout')
 local action_state = require("telescope.actions.state")
 
-local nnoremap = require("chienan.utils").nnoremap
+vim.keymap.set('n', '<leader>ff', builtin.find_files, { noremap = true, silent = true })
+vim.keymap.set('n', '<leader>fg', builtin.live_grep, { noremap = true, silent = true })
+vim.keymap.set('n', '<leader>fb', builtin.buffers, { noremap = true, silent = true })
+vim.keymap.set('n', '<leader>fh', builtin.help_tags, { noremap = true, silent = true })
+vim.keymap.set('n', '<leader>fc', builtin.commands, { noremap = true, silent = true })
+vim.keymap.set('n', '<leader>fo', builtin.oldfiles, { noremap = true, silent = true })
+vim.keymap.set('n', '<leader>*', builtin.grep_string, { noremap = true, silent = true })
+vim.keymap.set('n', '<leader>;', builtin.command_history, { noremap = true, silent = true })
+vim.keymap.set('n', '<leader>fs', builtin.spell_suggest, { noremap = true, silent = true })
 
 local custom_actions = {}
 
-custom_actions.project_files = function()
+custom_actions.project_files = function ()
   local opts = {}
-  local ok = pcall(require("telescope.builtin").git_files, opts)
+  local ok = pcall(builtin.git_files, opts)
   if not ok then
-    require("telescope.builtin").find_files(opts)
+    builtin.find_files(opts)
   end
 end
 
+-- fallback to find_files while the git_files cannot find a .git directory
+vim.keymap.set('n', '<C-p>', function()
+  custom_actions.project_files()
+end, { silent = true })
+
 -- open multiple files at once
-custom_actions._multiple_open = function(prompt_bufnr, open_cmd)
+custom_actions._multiple_open = function (prompt_bufnr, open_cmd)
   local picker = action_state.get_current_picker(prompt_bufnr)
   local search_res_count = picker.manager:num_results()
   if search_res_count == 0 then
@@ -29,26 +43,29 @@ custom_actions._multiple_open = function(prompt_bufnr, open_cmd)
   vim.cmd("cfdo " .. open_cmd)
 end
 
-custom_actions.multi_selection_open_vsplit = function(prompt_bufnr)
+custom_actions.multi_selection_open_vsplit = function (prompt_bufnr)
   custom_actions._multiple_open(prompt_bufnr, "vsplit")
 end
 
-custom_actions.multi_selection_open_split = function(prompt_bufnr)
+custom_actions.multi_selection_open_split = function (prompt_bufnr)
   custom_actions._multiple_open(prompt_bufnr, "split")
 end
 
-custom_actions.multi_selection_open_tab = function(prompt_bufnr)
+custom_actions.multi_selection_open_tab = function (prompt_bufnr)
   custom_actions._multiple_open(prompt_bufnr, "tabe")
 end
 
-custom_actions.multi_selection_open = function(prompt_bufnr)
+custom_actions.multi_selection_open = function (prompt_bufnr)
   custom_actions._multiple_open(prompt_bufnr, "edit")
 end
 
-require('telescope').setup {
+require("telescope").load_extension("node_modules")
+require("telescope").load_extension("harpoon")
+require("telescope").load_extension("git_worktree")
+require('telescope').setup{
   defaults = {
     path_display = {
-      shorten = { len = 3, exclude = { 1, -1 } }
+      shorten = { len = 3, exclude = { 1, -1 }}
     },
     vimgrep_arguments = {
       "rg",
@@ -85,7 +102,7 @@ require('telescope').setup {
     },
     find_files = {
       previewer = false,
-      find_command = { "fd", "--type", "f", "--strip-cwd-prefix", "-H" },
+      find_command = { "fd", "--type", "f", "--strip-cwd-prefix" },
     },
     oldfiles = {
       previewer = false,
@@ -104,13 +121,12 @@ require('telescope').setup {
   },
 }
 
-require("telescope").load_extension("node_modules")
-require("telescope").load_extension("harpoon")
-require("telescope").load_extension("git_worktree")
+vim.keymap.set("n", "<leader>gw", function()
+  require("telescope").extensions.git_worktree.git_worktrees()
+end)
 
--- fallback to find_files while the git_files cannot find a .git directory
-nnoremap("<C-p>", function()
-  custom_actions.project_files()
-end, { silent = true })
+vim.keymap.set("n", "<leader>gm", function()
+  require("telescope").extensions.git_worktree.create_git_worktree()
+end)
 
 return custom_actions
