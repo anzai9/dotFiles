@@ -1,8 +1,14 @@
 vim.g.mapleader = " "
 vim.keymap.set('n', '<leader>pv', vim.cmd.Ex)
 
-local opts = { noremap = true, silent = true }
+local opts = { silent = true }
 
+-- move cursor by display lines when wrap is on
+vim.keymap.set("n", "j", "v:count == 0 ? 'gj' : 'j'", { expr = true, silent = true })
+vim.keymap.set("n", "k", "v:count == 0 ? 'gk' : 'k'", { expr = true, silent = true })
+-- better indenting
+vim.keymap.set("v", "<", "<gv")
+vim.keymap.set("v", ">", ">gv")
 -- move line up and down when in v mode
 vim.keymap.set("v", "J", ":m '>+1<CR>gv=gv", opts)
 vim.keymap.set("v", "K", ":m '<-2<CR>gv=gv", opts)
@@ -20,12 +26,16 @@ vim.keymap.set("n", "<leader>w", ":<C-U>update<CR>", opts)
 vim.keymap.set("n", "Q", "<nop>")
 -- Close a buffer and switching to another buffer, do not close the
 -- window, see https://stackoverflow.com/q/4465095/6064933
-vim.keymap.set("n", "<leader>x", ":<C-U>bprevious <bar> bdelete #<CR>", opts)
+vim.keymap.set("n", "<C-X>", ":<C-U>bprevious <bar> bdelete #<CR>", opts)
 -- Move among buffers with mapleader"
-vim.keymap.set("", "<leader>.", ":bnext<CR>", opts)
-vim.keymap.set("", "<leader>,", ":bprev<CR>", opts)
+vim.keymap.set("", "]b", ":bnext<CR>", opts)
+vim.keymap.set("", "[b", ":bprev<CR>", opts)
 -- Split
 vim.keymap.set("n", "<leader>h", ":<C-U>split<CR>", opts)
 vim.keymap.set("n", "<leader>v", ":<C-U>vsplit<CR>", opts)
 -- Undo Panel
-vim.keymap.set("n", "<leader>u", ":UndotreeToggle<CR>", otps)
+vim.keymap.set("n", "<leader>u", ":UndotreeToggle<CR>", opts)
+-- Clear search with <esc>
+vim.keymap.set({ "i", "n" }, "<esc>", "<cmd>noh<cr><esc>", { desc = "Escape and clear hlsearch" })
+-- New file
+vim.keymap.set("n", "<leader>nf", "<cmd>enew<cr>", { desc = "New File" })
