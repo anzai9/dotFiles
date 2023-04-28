@@ -2,3 +2,5 @@ nvim/plugin/
 nvim/undodir/
 nvim/.easyclip
 .vim
+*.log
+*.out
