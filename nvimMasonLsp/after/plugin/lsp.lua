@@ -14,10 +14,13 @@ lsp.ensure_installed({
     "html",
     "cssls",
     "lua_ls",
+    "prismals",
 })
 
+local lspconfig = require('lspconfig')
+
 -- Fix Undefined global 'vim'
-lsp.configure('lua_ls', {
+lspconfig.lua_ls.setup({
     settings = {
         Lua = {
             diagnostics = {
@@ -26,7 +29,8 @@ lsp.configure('lua_ls', {
         }
     }
 })
-lsp.configure('jsonls', {
+
+lspconfig.jsonls.setup({
     settings = {
         json = {
             schemas = require('schemastore').json.schemas(),
@@ -36,6 +40,23 @@ lsp.configure('jsonls', {
             validate = {
                 enable = true,
             }
+        }
+    }
+})
+
+lspconfig.prismals.setup({
+    settings = {
+        prisma = {
+            prismaFmtBinPath = 'prisma-fmt',
+            prismaFmtArgs = { '--indent-width=4' },
+            lint = {
+                enable = true,
+                autoFix = true,
+            },
+            format = {
+                enable = true,
+                autoFix = true,
+            },
         }
     }
 })
@@ -57,13 +78,19 @@ local cmp_mappings = lsp.defaults.cmp_mappings({
     ['<C-f>'] = cmp_action.luasnip_jump_forward(),
     ['<C-b>'] = cmp_action.luasnip_jump_backward(),
 })
-require('luasnip.loaders.from_vscode').lazy_load()
+require('luasnip/loaders/from_vscode').lazy_load()
 
 lsp.setup_nvim_cmp({
+    snippet = {
+        expand = function(args)
+            require('luasnip').lsp_expand(args.body)
+        end,
+    },
     sources = {
         { name = "path" },
-        { name = "nvim_lsp" },
         { name = "copilot" },
+        { name = "nvim_lsp" },
+        { name = "nvim_lua" },
         { name = "buffer",  keyword_length = 3 },
         { name = "luasnip" },
     },
@@ -106,4 +133,22 @@ lsp.setup()
 
 vim.diagnostic.config({
     virtual_text = true
+})
+
+local null_ls = require('null-ls')
+
+null_ls.setup({
+    sources = {
+        null_ls.builtins.formatting.prettier,
+        null_ls.builtins.diagnostics.eslint,
+        null_ls.builtins.formatting.rustfmt,
+        null_ls.builtins.formatting.jq,
+    }
+})
+
+-- See mason-null-ls.nvim's documentation for more details:
+-- https://github.com/jay-babu/mason-null-ls.nvim#setup
+require('mason-null-ls').setup({
+    ensure_installed = nil,
+    automatic_installation = true,
 })

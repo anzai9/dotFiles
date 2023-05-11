@@ -21,12 +21,12 @@ vim.keymap.set("n", "J", "mzJ`z", opts)
 vim.keymap.set({ "n", "v" }, "<leader>y", [["+y]])
 vim.keymap.set("n", "<leader>Y", [["+Y]])
 -- Shortcut for faster save and quit
-vim.keymap.set("n", "<leader>w", ":<C-U>update<CR>", opts)
+vim.keymap.set("n", "<leader>w", "<cmd>w<CR>", opts)
 -- disable captial q to quit just in case
 vim.keymap.set("n", "Q", "<nop>")
 -- Close a buffer and switching to another buffer, do not close the
 -- window, see https://stackoverflow.com/q/4465095/6064933
-vim.keymap.set("n", "<C-X>", ":<C-U>bprevious <bar> bdelete #<CR>", opts)
+vim.keymap.set("n", "<C-X>", "<cmd>bprevious <bar> bdelete #<CR>", opts)
 -- Move among buffers with mapleader"
 vim.keymap.set("", "]b", ":bnext<CR>", opts)
 vim.keymap.set("", "[b", ":bprev<CR>", opts)
