@@ -42,3 +42,5 @@ vim.opt.laststatus = 3
 vim.opt.clipboard:append { "unnamedplus" }
 
 vim.opt.hidden = true
+
+vim.opt.completeopt = { "menuone", "noselect", "noselect" }
