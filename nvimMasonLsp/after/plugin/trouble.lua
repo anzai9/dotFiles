@@ -1,5 +1,6 @@
 require('trouble').setup {
     icons = false,
+    width = 200,
     signs = {
         error = 'error',
         warning = 'warn',
