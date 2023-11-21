@@ -1,6 +1,6 @@
 vim.opt.list = true
 vim.opt.listchars:append 'eol:↴'
-require('indent_blankline').setup({
+require('ibl').setup({
     -- U+2502 may also be a good choice, it will be on the middle of cursor.
     -- U+250A is also a good choice
     char = "|",
@@ -18,10 +18,10 @@ end
 
 vim.api.nvim_create_autocmd({ 'InsertEnter' }, {
     group = augroup('indent_blacnkline_disable'),
-    command = 'IndentBlanklineDisable',
+    command = 'IBLDisable',
 })
 
 vim.api.nvim_create_autocmd({ 'InsertLeave' }, {
     group = augroup('indent_blacnkline_enalbe'),
-    command = 'IndentBlanklineEnable',
+    command = 'IBLEnable',
 })
