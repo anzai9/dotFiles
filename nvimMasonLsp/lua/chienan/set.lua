@@ -44,3 +44,5 @@ vim.opt.clipboard:append { "unnamedplus" }
 vim.opt.hidden = true
 
 vim.opt.completeopt = { "menuone", "noselect", "noselect" }
+
+vim.opt.conceallevel = 2;

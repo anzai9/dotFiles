@@ -1,9 +1,9 @@
 #!/bin/bash
 
 # install homebrew
-/usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 # the packages for nvim
-brew install zsh tmux git git-extras neovim ripgrep fd
+brew install zsh tmux git git-extras neovim ripgrep fd lua-language-server bat git-delta fzf tree-sitter
 
 # install font
 brew tap homebrew/cask-fonts
@@ -24,7 +24,7 @@ nvm install stable
 # install js development tools
 npm -g i jest mermaid
 
-local CONFIG_PATH = "~/.config"
+export CONFIG_PATH = "~/.config"
 
 ln -fs "$PWD/.vimrc" "$HOME/.vimrc"
 ln -fs "$PWD/nvim" "$CONFIG_PATH/nvim"
