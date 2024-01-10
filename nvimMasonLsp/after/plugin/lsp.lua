@@ -135,7 +135,7 @@ lsp.format_on_save({
     ['prismals'] = { 'prisma' },
     ['null-ls'] = {
       'typescript', 'typescriptreact', 'typescript.tsx', 'javascript', 'javascriptreact',
-      'javascript.jsx', 'rust', 'lua', 'python'
+      'javascript.jsx', 'rust', 'lua', 'python', 'go', 'json'
     }
   }
 })
@@ -155,19 +155,20 @@ require('mason-lspconfig').setup({
 })
 
 local null_ls = require('null-ls')
+local utils = require("null-ls.utils")
 local null_opts = lsp.build_options('null-ls', {})
 -- custom sources
-local h = require('null-ls.helpers')
+-- local h = require('null-ls.helpers')
 
-local blackd = {
-  name = 'blackd',
-  method = null_ls.methods.FORMATTING,
-  filetypes = { 'python' },
-  generator = h.formatter_factory {
-    command = 'blackd-client',
-    to_stdin = true,
-  },
-}
+-- local blackd = {
+--   name = 'blackd',
+--   method = null_ls.methods.FORMATTING,
+--   filetypes = { 'python' },
+--   generator = h.formatter_factory {
+--     command = 'blackd-client',
+--     to_stdin = true,
+--   },
+-- }
 
 null_ls.setup({
   on_attach = function(client, bufnr)
@@ -175,14 +176,23 @@ null_ls.setup({
   end,
   sources = {
     null_ls.builtins.formatting.prettierd,
-    null_ls.builtins.diagnostics.eslint_d,
-    null_ls.builtins.formatting.rustfmt,
+    null_ls.builtins.diagnostics.eslint,
+    null_ls.builtins.code_actions.eslint,
     null_ls.builtins.formatting.jq,
     null_ls.builtins.formatting.prismaFmt,
-    null_ls.builtins.formatting.black.with({
-      extra_args = { "--line-length=120" }
+    null_ls.builtins.diagnostics.typos,
+    null_ls.builtins.diagnostics.mypy.with({
+      runtime_condition = function(params)
+        return utils.path.exists(params.bufname)
+      end,
+      cwd = function (_) return vim.fn.getcwd() end
     }),
-    null_ls.builtins.formatting.isort,
+    -- null_ls.builtins.formatting.black.with({
+    --   extra_args = { "--line-length=120" }
+    -- }),
+    -- null_ls.builtins.formatting.isort,
+    null_ls.builtins.formatting.ruff,
+    null_ls.builtins.diagnostics.ruff,
   }
 })
 
