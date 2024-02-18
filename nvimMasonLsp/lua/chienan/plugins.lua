@@ -53,7 +53,7 @@ return require('packer').startup(function(use)
 
   -- Telescope
   use {
-    'nvim-telescope/telescope.nvim', tag = '0.1.0',
+    'nvim-telescope/telescope.nvim', tag = '0.1.5',
     requires = {
       'nvim-lua/plenary.nvim',
       'nvim-telescope/telescope-node-modules.nvim',
@@ -213,6 +213,9 @@ return require('packer').startup(function(use)
     tag = "*",
     requires = {
       "nvim-lua/plenary.nvim",
+      "hrsh7th/nvim-cmp",
+      "nvim-telescope/telescope.nvim",
+      "nvim-treesitter",
     },
   })
 

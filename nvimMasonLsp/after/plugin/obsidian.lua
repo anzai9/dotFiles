@@ -20,8 +20,6 @@ require("obsidian").setup({
 
   completion = {
     nvim_cmp = true,
-    -- Trigger completion at 2 chars.
-    min_chars = 2,
 
     -- Where to put new notes created from completion. Valid options are
     --  * "current_dir" - put new notes in same directory as the current buffer.
@@ -55,7 +53,7 @@ require("obsidian").setup({
       opts = { noremap = false, expr = true, buffer = true },
     },
     -- Toggle check-boxes.
-    ["<leader>ch"] = {
+    ["<leader>oc"] = {
       action = function()
         return require("obsidian").util.toggle_checkbox()
       end,
@@ -136,6 +134,11 @@ require("obsidian").setup({
   -- first one they find. You can set this option to tell obsidian.nvim to always use this
   -- finder.
   finder = "telescope.nvim",
+  finder_mappings = {
+    -- Create a new note from your query with `:ObsidianSearch` and `:ObsidianQuickSwitch`.
+    -- Currently only telescope supports this.
+    new = "<leader>on",
+  },
 
   -- Optional, sort search results by "path", "modified", "accessed", or "created".
   -- The recommend value is "modified" and `true` for `sort_reversed`, which means, for example,
@@ -222,3 +225,5 @@ vim.keymap.set("n", "gf", function()
     return "gf"
   end
 end, { noremap = false, expr = true })
+
+vim.keymap.set("n", "<leader>ot", ":ObsidianToday<CR>", { noremap = false, expr = true })
