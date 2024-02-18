@@ -213,6 +213,9 @@ return require('packer').startup(function(use)
     tag = "*",
     requires = {
       "nvim-lua/plenary.nvim",
+      "hrsh7th/nvim-cmp",
+      "nvim-telescope/telescope.nvim",
+      "nvim-treesitter",
     },
   })
 

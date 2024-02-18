@@ -185,7 +185,7 @@ null_ls.setup({
       runtime_condition = function(params)
         return utils.path.exists(params.bufname)
       end,
-      cwd = function (_) return vim.fn.getcwd() end
+      cwd = function(_) return vim.fn.getcwd() end
     }),
     -- null_ls.builtins.formatting.black.with({
     --   extra_args = { "--line-length=120" }
@@ -193,6 +193,7 @@ null_ls.setup({
     -- null_ls.builtins.formatting.isort,
     null_ls.builtins.formatting.ruff,
     null_ls.builtins.diagnostics.ruff,
+    null_ls.builtins.formatting.goimports,
   }
 })
 
