@@ -8,7 +8,23 @@ return {
     "catppuccin/nvim",
     name = "catppuccin",
     priority = 1000,
-    config = function() vim.cmd('colorscheme catppuccin-mocha') end
+    config = function() vim.cmd('colorscheme catppuccin-mocha') end,
+    opts = {
+      {
+        integrations = {
+          diffview = true,
+          fidget = true,
+          indent_blankline = {
+            enabled = true,
+            scope_color = "lavendar",
+            colored_indent_levels = false,
+          },
+          mason = true,
+          lsp_trouble = true,
+          which_key = true,
+        }
+      }
+    }
   },
   { 'RRethy/vim-illuminate', event = { 'BufReadPost', 'BufNewFile' } },
   {

@@ -61,11 +61,89 @@ return {
     end
   },
   {
-    'folke/todo-comments.nvim',
-    dependencies = "nvim-lua/plenary.nvim",
+    "folke/todo-comments.nvim",
+    dependencies = { "nvim-lua/plenary.nvim" },
+    cmd = { "TodoTrouble", "TodoTelescope" },
+    event = "VimEnter",
     keys = {
-      { 'n', ']t', '<cmd>lua require("todo-comments").jump_next()<CR>', desc = "Next todo comment" },
-      { 'n', '[t', '<cmd>lua require("todo-comments").jump_prev()<CR>', desc = "Previous todo comment" }
+      { ']t', '<cmd>lua require("todo-comments").jump_next()<CR>', desc = "Next todo comment" },
+      { '[t', '<cmd>lua require("todo-comments").jump_prev()<CR>', desc = "Previous todo comment" }
+    },
+    config = function()
+      require('todo-comments').setup({})
+    end
+  },
+  { 'tpope/vim-sleuth' },                                  -- Detect tabstop and shiftwidth automatically
+  { 'lukas-reineke/indent-blankline.nvim', main = 'ibl' }, -- indent
+  'tpope/vim-repeat',                                      -- replace copy actions by delete using m to replace d
+  {
+    'svermeulen/vim-easyclip',
+    config = function()
+      vim.g.EasyClipAutoFormat = 1
+      vim.g.EasyClipAlwaysMoveCursorToEndOfPaste = 1
+      vim.g.EasyClipPreserveCursorPositionAfterYank = 1
+    end
+  },
+  {
+    'easymotion/vim-easymotion',
+    config = function()
+      vim.keymap.set("", "/", "<Plug>(easymotion-sn)", { noremap = false })
+      vim.keymap.set("o", "/", "<Plug>(easymotion-tn)", { noremap = false })
+
+      vim.g.EasyMotion_smartcase = 1
+      vim.g.EasyMotion_do_mapping = 0
+    end
+  },
+  {
+    "folke/flash.nvim",
+    event = "VeryLazy",
+    ---@type Flash.Config
+    opts = {
+      modes = {
+        char = {
+          jump_labels = true
+        }
+      }
+    },
+    keys = {
+      {
+        '.', -- Select any word
+        mode = { 'n', 'v' },
+        function()
+          require("flash").jump({
+            search = {
+              mode = function(pattern)
+                -- remove leading dot
+                if pattern:sub(1, 1) == "." then
+                  pattern = pattern:sub(2)
+                end
+                -- return word pattern and proper skip pattern
+                return ([[\<%s\w*\>]]):format(pattern), ([[\<%s]]):format(pattern)
+              end,
+            },
+            jump = { pos = "range" },
+          })
+        end,
+        desc = "Flash select any word word"
+      },
     }
   },
+  'terryma/vim-multiple-cursors',
+  {
+    'echasnovski/mini.nvim',
+    config = function()
+      -- :h MiniAi-textobject-builtin
+      require('mini.ai').setup({ n_lines = 500 })
+      -- like vim-sandwitch
+      require('mini.surround').setup()
+
+      -- simple statsline
+      local statusline = require 'mini.statusline'
+      statusline.setup { use_icons = vim.g.have_nerd_font }
+      ---@diagnostic disable-next-line: duplicate-set-field
+      statusline.section_location = function()
+        return '%2l:%-2v'
+      end
+    end
+  }
 }

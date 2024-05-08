@@ -9,6 +9,7 @@ vim.opt.shiftwidth = 2
 vim.opt.expandtab = true
 
 vim.opt.smartindent = true
+vim.opt.breakindent = true
 vim.opt.magic = true
 
 vim.opt.wrap = false
@@ -23,11 +24,22 @@ vim.opt.incsearch = true
 
 vim.opt.termguicolors = true
 
-vim.opt.scrolloff = 8
+vim.opt.scrolloff = 10
 vim.opt.signcolumn = "yes"
 vim.opt.isfname:append("@-@")
 
-vim.opt.updatetime = 50
+-- Decrease update time
+vim.opt.updatetime = 250
+-- Decrease mapped sequence wait time
+-- Displays which-key popup sooner
+vim.opt.timeoutlen = 300
+
+-- Preview substitutions live, as you type!
+vim.opt.inccommand = 'split'
+
+-- Sets how neovim will display certain whitespace characters in the editor.
+vim.opt.list = true
+vim.opt.listchars = { tab = '» ', trail = '·', nbsp = '␣' }
 
 vim.opt.colorcolumn = "80"
 -- Give more space for displaying messages.
@@ -43,6 +55,7 @@ vim.opt.clipboard:append { "unnamedplus" }
 
 vim.opt.hidden = true
 
-vim.opt.completeopt = { "menuone", "noselect", "noselect" }
+vim.opt.completeopt = { "menu", "menuone",  "noselect", "noinsert" }
 
 vim.opt.conceallevel = 2;
+
