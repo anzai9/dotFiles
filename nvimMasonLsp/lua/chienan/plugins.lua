@@ -208,16 +208,16 @@ return require('packer').startup(function(use)
     end
   }
 
-  use({
-    "epwalsh/obsidian.nvim",
-    tag = "*",
-    requires = {
-      "nvim-lua/plenary.nvim",
-      "hrsh7th/nvim-cmp",
-      "nvim-telescope/telescope.nvim",
-      "nvim-treesitter",
-    },
-  })
+  -- use({
+  --   "epwalsh/obsidian.nvim",
+  --   tag = "*",
+  --   requires = {
+  --     "nvim-lua/plenary.nvim",
+  --     "hrsh7th/nvim-cmp",
+  --     "nvim-telescope/telescope.nvim",
+  --     "nvim-treesitter",
+  --   },
+  -- })
 
   -- Automatically set up your configuration after cloning packer.nvim
   -- Put this at the end after all plugins
