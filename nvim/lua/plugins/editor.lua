@@ -24,6 +24,7 @@ return {
       local actions = require('telescope.actions')
       local action_layout = require('telescope.actions.layout')
       local action_state = require("telescope.actions.state")
+      local action_utils = require("telescope.actions.utils")
 
       vim.keymap.set('n', '<leader>ff', builtin.find_files, { desc = '[F]ind [F]iles' })
       vim.keymap.set('n', '<leader>fg', builtin.live_grep, { desc = '[F]ind [G]rep', silent = true })
@@ -74,13 +75,33 @@ return {
         custom_actions.project_files()
       end, { silent = true, desc = "[] Find git files" })
 
+      local print_table = function(tbl)
+        print("print_table: ")
+        print(type(tbl))
+        if type(tbl) ~= "table" then
+          print(tbl)
+          return
+        end
+        for k, v in pairs(tbl) do
+          print(k, v)
+        end
+      end
+
       -- open multiple files at once
       custom_actions._multiple_open = function(prompt_bufnr, open_cmd)
+        print("prompt_bufnr: " .. prompt_bufnr)
+        print("open_cmd: ", open_cmd)
         local picker = action_state.get_current_picker(prompt_bufnr)
         local search_res_count = picker.manager:num_results()
         if search_res_count == 0 then
           return
         end
+
+        -- local results = {}
+        -- action_utils.map_entries(prompt_bufnr, function(entry, index, row)
+        --   results[row] = entry.value
+        -- end)
+        -- print_table(results)
         local selected_count = #picker:get_multi_selection()
         if not selected_count or selected_count <= 1 then
           actions.add_selection(prompt_bufnr)
@@ -127,11 +148,13 @@ return {
               ["<esc>"] = actions.close,
               ["<C-w>"] = action_layout.toggle_preview,
               ["<C-x>"] = false,
-              ["<CR>"] = custom_actions.multi_selection_open,
-              ["<C-V>"] = custom_actions.multi_selection_open_vsplit,
-              ["<C-S>"] = custom_actions.multi_selection_open_split,
-              ["<C-T>"] = custom_actions.multi_selection_open_tab,
             },
+            n = {
+              ["<C-j>"] = actions.move_selection_next,
+              ["<C-k>"] = actions.move_selection_previous,
+              ["<esc>"] = actions.close,
+              ["<C-w>"] = action_layout.toggle_preview,
+            }
           }
         },
         pickers = {
@@ -146,12 +169,36 @@ return {
           find_files = {
             previewer = false,
             find_command = { "fd", "--type", "f", "--strip-cwd-prefix" },
+            mappings = {
+              i = {
+                ["<CR>"] = custom_actions.multi_selection_open,
+                ["<C-V>"] = custom_actions.multi_selection_open_vsplit,
+                ["<C-S>"] = custom_actions.multi_selection_open_split,
+                ["<C-T>"] = custom_actions.multi_selection_open_tab,
+              },
+            }
           },
           oldfiles = {
             previewer = false,
+            mappings = {
+              i = {
+                ["<CR>"] = custom_actions.multi_selection_open,
+                ["<C-V>"] = custom_actions.multi_selection_open_vsplit,
+                ["<C-S>"] = custom_actions.multi_selection_open_split,
+                ["<C-T>"] = custom_actions.multi_selection_open_tab,
+              },
+            }
           },
           git_files = {
             previewer = false,
+            mappings = {
+              i = {
+                ["<CR>"] = custom_actions.multi_selection_open,
+                ["<C-V>"] = custom_actions.multi_selection_open_vsplit,
+                ["<C-S>"] = custom_actions.multi_selection_open_split,
+                ["<C-T>"] = custom_actions.multi_selection_open_tab,
+              },
+            }
           }
         },
         extensions = {
