@@ -21,6 +21,12 @@ opacity = 1.0
 x = 0
 y = 0
 
+[cursor.style]
+shape = "Block"
+
+[cursor.vi_mode_style]
+shape = "Beam"
+
 [colors.primary]
 background = "#1e1e2e"
 foreground = "#cdd6f4"

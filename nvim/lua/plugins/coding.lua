@@ -21,18 +21,18 @@ return {
       require('copilot_cmp').setup()
     end
   },
-  { -- codeium
-    "Exafunction/codeium.nvim",
-    dependencies = {
-      "nvim-lua/plenary.nvim",
-      "hrsh7th/nvim-cmp",
-    },
-    config = function()
-      require("codeium").setup({
-      })
-      vim.g.codeium_disable_bindings = 1
-    end
-  },
+  -- { -- codeium
+  --   "Exafunction/codeium.nvim",
+  --   dependencies = {
+  --     "nvim-lua/plenary.nvim",
+  --     "hrsh7th/nvim-cmp",
+  --   },
+  --   config = function()
+  --     require("codeium").setup({
+  --     })
+  --     vim.g.codeium_disable_bindings = 1
+  --   end
+  -- },
   {
     'max397574/better-escape.nvim',
     opts = {

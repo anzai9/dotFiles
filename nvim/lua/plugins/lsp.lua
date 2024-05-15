@@ -5,12 +5,12 @@ return {
       { 'williamboman/mason.nvim', config = true },
       'williamboman/mason-lspconfig.nvim',
       'WhoIsSethDaniel/mason-tool-installer.nvim', -- Install tools for LSP
-      { 'j-hui/fidget.nvim',       opts = {} }, -- lsp progress (optional)
-      { 'folke/neodev.nvim',       opts = {} }, -- config lua_ls for newvim config
-      { 'b0o/SchemaStore.nvim' }, -- json schema validator
+      { 'j-hui/fidget.nvim',       opts = {} },    -- lsp progress (optional)
+      { 'folke/neodev.nvim',       opts = {} },    -- config lua_ls for newvim config
+      { 'b0o/SchemaStore.nvim' },                  -- json schema validator
       {
-        'kevinhwang91/nvim-ufo',   -- folding tool
-        dependencies = {'kevinhwang91/promise-async'},
+        'kevinhwang91/nvim-ufo',                   -- folding tool
+        dependencies = { 'kevinhwang91/promise-async' },
         config = function()
           vim.o.foldcolumn = '1'
           vim.o.foldlevel = 99
@@ -203,6 +203,8 @@ return {
   { -- Autocompletion
     'hrsh7th/nvim-cmp',
     event = 'InsertEnter',
+    lazy = false,
+    priority = 100,
     dependencies = {
       {
         'L3MON4D3/LuaSnip',
@@ -223,10 +225,12 @@ return {
       'hrsh7th/cmp-path',
       'hrsh7th/cmp-buffer',
       'hrsh7th/cmp-cmdline',
+      'onsails/lspkind.nvim',
     },
     config = function()
       local cmp = require('cmp')
       local luasnip = require('luasnip')
+      local lspkind = require('lspkind')
       luasnip.config.setup({})
 
       cmp.setup({
@@ -235,28 +239,39 @@ return {
             luasnip.lsp_expand(args.body)
           end,
         },
-        -- completion = { completeopt = 'menu,menuone,noinsert' },
+        formatting = {
+          format = lspkind.cmp_format({
+            mode = 'text_symbol',     -- 'text', 'text_symbol', 'symbol_text', 'symbol'
+            maxwidth = function() return math.floor(0.45 * vim.o.columns) end,
+            ellipsis_char = '...',    -- when popup menu exceed maxwidth, the truncated part would show ellipsis_char instead (must define maxwidth first)
+            show_labelDetails = true, -- show labelDetails in menu. Disabled by default
+            -- The function below will be called before any actual modifications from lspkind
+            -- so that you can provide more controls on popup customization. (See [#30](https://github.com/onsails/lspkind-nvim/pull/30))
+            before = function(entry, vim_item)
+              return vim_item
+            end
+          })
+        },
 
         -- `:help ins-completion`
         mapping = cmp.mapping.preset.insert({
-          ['<S-Tab>'] = cmp.mapping.select_prev_item({
+          -- Select the [p]revious item
+          ['<C-p>'] = cmp.mapping.select_prev_item({
             behavior = cmp.SelectBehavior.Select,
           }),
-          ['<Tab>'] = cmp.mapping.select_next_item({
+          -- Select the [n]ext item
+          ['<C-n>'] = cmp.mapping.select_next_item({
             behavior = cmp.SelectBehavior.Select,
           }),
-          ['<C-k>'] = cmp.mapping.confirm({
-            -- behavior = cmp.ConfirmBehavior.Replace,
+          -- Accept ([y]es) the completion.
+          ['<C-y>'] = cmp.mapping.confirm({
+            behavior = cmp.ConfirmBehavior.Insert,
             select = true,
           }),
           ["<C-Space>"] = cmp.mapping.complete(),
           -- scroll up and down in the completion documentation
           ['<C-d>'] = cmp.mapping.scroll_docs(5),
           ['<C-u>'] = cmp.mapping.scroll_docs(-5),
-          -- Select the [n]ext item
-          ['<C-n>'] = cmp.mapping.select_next_item(),
-          -- Select the [p]revious item
-          ['<C-p>'] = cmp.mapping.select_prev_item(),
           -- Think of <c-l> as moving to the right of your snippet expansion.
           --  So if you have a snippet that's like:
           --  function $name($args)
@@ -276,14 +291,22 @@ return {
           end, { 'i', 's' }),
         }),
         sources = {
-          { name = "path" },
           { name = "copilot" },
-          { name = "codeium" },
+          -- { name = "codeium" },
+          { name = "path" },
           { name = "nvim_lsp" },
           { name = "buffer",  keyword_length = 3 },
           { name = "luasnip", keyword_length = 2 },
         },
       })
+
+      cmp.setup.filetype({ "sql" }, {
+        sources = {
+          { name = "vim-dadbod-completion" },
+          { name = "buffer" },
+        },
+      })
+
       -- `:` cmdline setup.
       cmp.setup.cmdline(':', {
         mapping = cmp.mapping.preset.cmdline(),
