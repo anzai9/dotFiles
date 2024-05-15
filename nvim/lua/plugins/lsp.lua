@@ -203,6 +203,8 @@ return {
   { -- Autocompletion
     'hrsh7th/nvim-cmp',
     event = 'InsertEnter',
+    lazy = false,
+    priority = 100,
     dependencies = {
       {
         'L3MON4D3/LuaSnip',
@@ -297,6 +299,14 @@ return {
           { name = "luasnip", keyword_length = 2 },
         },
       })
+
+      cmp.setup.filetype({ "sql" }, {
+        sources = {
+          { name = "vim-dadbod-completion" },
+          { name = "buffer" },
+        },
+      })
+
       -- `:` cmdline setup.
       cmp.setup.cmdline(':', {
         mapping = cmp.mapping.preset.cmdline(),
