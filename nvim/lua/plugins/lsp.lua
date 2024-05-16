@@ -61,8 +61,33 @@ return {
       --  - settings (table): Override the default settings passed when initializing the server.
       --        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
       local servers = {
-        gopls = {},
-        rust_analyzer = {},
+        gopls = {
+          analyses = {
+            unusedparams = true,
+          },
+          staticcheck = true,
+          gofumpt = true,
+        },
+        rust_analyzer = {
+          settings = {
+            ["rust-analyzer"] = {
+              imports = {
+                granularity = {
+                  group = "module",
+                },
+                prefix = "self",
+              },
+              cargo = {
+                buildScripts = {
+                  enable = true,
+                },
+              },
+              procMacro = {
+                enable = true
+              },
+            }
+          }
+        },
         tsserver = {},
         lua_ls = {
           settings = {
@@ -170,15 +195,22 @@ return {
       end,
       formatters_by_ft = {
         lua = { 'stylua' },
-        python = { "ruff", "isort", "black" },
-        javascript = { "prettierd", "eslint_d" },
-        typescript = { "prettierd", "eslint_d" },
-        javascriptreact = { "prettierd", "eslint_d" },
-        typescriptreact = { "prettierd", "eslint_d" },
-        go = { 'goimports' },
+        python = function(bufnr)
+          if require("conform").get_formatter_info("ruff_format", bufnr).available then
+            return { "ruff_format" }
+          else
+            return { "isort", "black" }
+          end
+        end,
+        javascript = { { "prettierd", "prettier" }, "eslint_d" },
+        typescript = { { "prettierd", "prettier" }, "eslint_d" },
+        javascriptreact = { { "prettierd", "prettier" }, "eslint_d" },
+        typescriptreact = { { "prettierd", "prettier" }, "eslint_d" },
+        go = { 'goimports', 'golines', 'gofumpt' },
         json = { 'jq' },
-        yaml = { "prettierd" },
+        yaml = { "yq" },
         markdown = { "prettierd" },
+        ["*"] = { "codespell" },
       },
     },
     config = function()
@@ -252,7 +284,6 @@ return {
             end
           })
         },
-
         -- `:help ins-completion`
         mapping = cmp.mapping.preset.insert({
           -- Select the [p]revious item
@@ -322,5 +353,76 @@ return {
         })
       })
     end
-  }
+  },
+  {
+    "nvimtools/none-ls.nvim",
+    dependencies = {
+      "nvim-lua/plenary.nvim",
+      "nvimtools/none-ls-extras.nvim",
+    },
+    config = function()
+      local null_ls = require("null-ls")
+      null_ls.setup({
+        sources = {
+          null_ls.builtins.code_actions.gitsigns,
+          null_ls.builtins.code_actions.proselint, -- English style linter
+          null_ls.builtins.code_actions.refactoring,
+          require("none-ls.code_actions.eslint_d"),
+
+          null_ls.builtins.diagnostics.codespell,
+          null_ls.builtins.diagnostics.trail_space,
+          null_ls.builtins.diagnostics.proselint,
+          null_ls.builtins.diagnostics.golangci_lint, -- Go linter
+          null_ls.builtins.diagnostics.staticcheck,   -- Go static analysis tool
+          null_ls.builtins.diagnostics.hadolint,      -- Dockerfile linter
+          null_ls.builtins.diagnostics.mypy,          -- python type checker
+          require("none-ls.diagnostics.ruff"),        -- python linter
+          null_ls.builtins.diagnostics.selene,        -- lua linter
+          null_ls.builtins.diagnostics.semgrep,       -- static analysis tool
+          null_ls.builtins.diagnostics.stylelint,     -- css lint
+          require("none-ls.diagnostics.eslint_d"),
+          -- terraform linters
+          null_ls.builtins.diagnostics.terraform_validate,
+          null_ls.builtins.diagnostics.tfsec,
+          null_ls.builtins.diagnostics.trivy,
+
+          null_ls.builtins.formatting.rustywind,
+          require("none-ls.formatting.jq"),
+        }
+      })
+    end
+  },
+  {
+    "ThePrimeagen/refactoring.nvim",
+    dependencies = {
+      "nvim-lua/plenary.nvim",
+      "nvim-treesitter/nvim-treesitter",
+    },
+    config = function()
+      require("refactoring").setup()
+      vim.keymap.set("x", "<leader>re", function() require('refactoring').refactor('Extract Function') end,
+        { desc = '[R]efactor [E]xtract function' })
+      vim.keymap.set("x", "<leader>rf", function()
+          require('refactoring').refactor('Extract Function To File')
+        end,
+        { desc = '[R]efactor extract function to [F]ile' }
+      )
+      vim.keymap.set("x", "<leader>rv", function() require('refactoring').refactor('Extract Variable') end,
+        { desc = '[R]efactor extract [V]ariable' }
+      )
+      vim.keymap.set("n", "<leader>rI", function() require('refactoring').refactor('Inline Function') end,
+        { desc = '[R]efactor [I]line function' }
+      )
+      vim.keymap.set({ "n", "x" }, "<leader>ri", function() require('refactoring').refactor('Inline Variable') end,
+        { desc = '[R]efactor [i]line variable' }
+      )
+
+      vim.keymap.set("n", "<leader>rb", function() require('refactoring').refactor('Extract Block') end,
+        { desc = '[R]efactor [B]lock' }
+      )
+      vim.keymap.set("n", "<leader>rbf", function() require('refactoring').refactor('Extract Block To File') end,
+        { desc = '[R]efactor [B]lock to [F]ile' }
+      )
+    end,
+  },
 }
