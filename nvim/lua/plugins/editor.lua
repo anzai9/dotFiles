@@ -60,6 +60,13 @@ return {
         builtin.find_files { cwd = vim.fn.stdpath 'config' }
       end, { desc = '[F]ind [N]eovim files' })
 
+      vim.keymap.set(
+        { "n", "x" },
+        "<leader>rr",
+        function() require('telescope').extensions.refactoring.refactors() end,
+        { desc = '[R]efactor selector' }
+      )
+
       local custom_actions = {}
 
       custom_actions.project_files = function()
@@ -216,6 +223,7 @@ return {
       pcall(require("telescope").load_extension, "node_modules")
       pcall(require('telescope').load_extension, 'fzf')
       pcall(require('telescope').load_extension, 'ui-select')
+      pcall(require("telescope").load_extension, "refactoring")
 
       return custom_actions
     end,
