@@ -6,6 +6,8 @@ return {
 			ensure_installed = {
 				"python",
 				"go",
+				"gomod",
+				"gosum",
 				"lua",
 				"c",
 				"cpp",
@@ -18,6 +20,7 @@ return {
 				"yaml",
 				"toml",
 				"json",
+				"terraform",
 				"rust",
 				"markdown",
 				"markdown_inline",
@@ -29,6 +32,9 @@ return {
 				"cmake",
 				"http",
 				"diff",
+				"gitignore",
+				"gitcommit",
+				"git_config",
 			},
 			sync_install = true,
 

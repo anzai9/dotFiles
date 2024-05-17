@@ -185,11 +185,9 @@ return {
 				"stylua",
 				"prettierd",
 				"eslint_d",
-				"tailwindcss",
-				"goimports",
+				"rustywind",
 				"jq",
-				"yamlls",
-				"jsonlint",
+				"yq",
 			})
 			require("mason-tool-installer").setup({
 				ensure_installed = ensure_installed,
@@ -483,8 +481,6 @@ return {
 					null_ls.builtins.diagnostics.terraform_validate,
 					null_ls.builtins.diagnostics.tfsec,
 					null_ls.builtins.diagnostics.trivy,
-
-					require("none-ls.formatting.jq"),
 				},
 			})
 		end,
