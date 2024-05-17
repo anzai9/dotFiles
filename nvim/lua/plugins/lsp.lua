@@ -225,17 +225,59 @@ return {
 		cmd = { "ConformInfo" },
 		config = function()
 			local conform = require("conform")
+			local slow_format_filetypes = {}
+
+			local function react_format(bufnr)
+				if
+					require("conform").get_formatter_info("rustywind", bufnr).available
+				then
+					return {
+						{ "rustywind" },
+						{ "prettierd", "prettier" },
+						{ "eslint_d", "eslint" },
+					}
+				else
+					return {
+						{ "prettierd", "prettier" },
+						{ "eslint_d", "eslint" },
+					}
+				end
+			end
+
+			local js_format = {
+				{ "prettierd", "prettier" },
+				{ "eslint_d", "eslint" },
+			}
+
 			conform.setup({
 				notify_on_error = false,
 				format_on_save = function(bufnr)
+					if slow_format_filetypes[vim.bo[bufnr].filetype] then
+						return
+					end
+
+					local function on_format(err)
+						if err and err:match("timeout$") then
+							slow_format_filetypes[vim.bo[bufnr].filetype] = true
+						end
+					end
+
 					local disable_filetypes = { c = true, cpp = true }
 					if vim.tbl_contains(disable_filetypes, vim.bo[bufnr].filetype) then
 						return
 					end
+
 					return {
 						timeout_ms = 500,
 						lsp_fallback = not disable_filetypes[vim.bo[bufnr].filetype],
-					}
+					},
+						on_format
+				end,
+				format_after_save = function(bufnr)
+					if not slow_format_filetypes[vim.bo[bufnr].filetype] then
+						return
+					end
+					return { lsp_fallback = true }
 				end,
 				formatters_by_ft = {
 					lua = { "stylua" },
@@ -248,16 +290,10 @@ return {
 							return { "isort", "black" }
 						end
 					end,
-					javascript = { { "prettierd", "prettier" }, { "eslint_d", "eslint" } },
-					typescript = { { "prettierd", "prettier" }, { "eslint_d", "eslint" } },
-					javascriptreact = {
-						{ "prettierd", "prettier" },
-						{ "eslint_d", "eslint" },
-					},
-					typescriptreact = {
-						{ "prettierd", "prettier" },
-						{ "eslint_d", "eslint" },
-					},
+					javascript = js_format,
+					typescript = js_format,
+					javascriptreact = react_format,
+					typescriptreact = react_format,
 					go = { "goimports", "golines", "gofumpt" },
 					json = { "jq" },
 					yaml = { "yq" },
@@ -269,7 +305,7 @@ return {
 			vim.keymap.set({ "n", "v" }, "<leader>fm", function()
 				require("conform").format({
 					lsp_fallback = true,
-					timeout_ms = 500,
+					async = true,
 				})
 			end, { desc = "[F]ormat buffer and range (in view mode)" })
 
@@ -448,7 +484,6 @@ return {
 					null_ls.builtins.diagnostics.tfsec,
 					null_ls.builtins.diagnostics.trivy,
 
-					null_ls.builtins.formatting.rustywind,
 					require("none-ls.formatting.jq"),
 				},
 			})
