@@ -35,11 +35,11 @@ vim.opt.updatetime = 250
 vim.opt.timeoutlen = 300
 
 -- Preview substitutions live, as you type!
-vim.opt.inccommand = 'split'
+vim.opt.inccommand = "split"
 
 -- Sets how neovim will display certain whitespace characters in the editor.
 vim.opt.list = true
-vim.opt.listchars = { tab = '» ', trail = '·', nbsp = '␣' }
+vim.opt.listchars = { tab = "» ", trail = "·", nbsp = "␣" }
 
 vim.opt.colorcolumn = "80"
 -- Give more space for displaying messages.
@@ -51,11 +51,10 @@ vim.opt.splitbelow = true
 
 vim.opt.laststatus = 3
 
-vim.opt.clipboard:append { "unnamedplus" }
+vim.opt.clipboard:append({ "unnamedplus" })
 
 vim.opt.hidden = true
 
-vim.opt.completeopt = { "menu", "menuone",  "noselect", "noinsert" }
+vim.opt.completeopt = { "menu", "menuone", "noselect", "noinsert" }
 
-vim.opt.conceallevel = 2;
-
+vim.opt.conceallevel = 2
