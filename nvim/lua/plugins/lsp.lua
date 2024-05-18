@@ -1,17 +1,4 @@
 return {
-	keys = {
-		{
-			"<leader>fm",
-			function()
-				require("conform").format({
-					lsp_fallback = true,
-					timeout_ms = 500,
-				})
-			end,
-			mode = { "n", "v" },
-			desc = "[F]ormat buffer and range (in view mode)",
-		},
-	},
 	{
 		"neovim/nvim-lspconfig",
 		dependencies = {

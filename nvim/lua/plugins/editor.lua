@@ -135,6 +135,10 @@ return {
 				require("telescope").extensions.refactoring.refactors()
 			end, { desc = "[R]efactor selector" })
 
+			vim.keymap.set("n", "<leader>fq", function()
+				require("telescope").extensions.rest.select_env()
+			end, { desc = "[F]ind rest.nvim [Q]uery env" })
+
 			local custom_actions = {}
 
 			custom_actions.project_files = function()
@@ -292,6 +296,7 @@ return {
 			pcall(require("telescope").load_extension, "fzf")
 			pcall(require("telescope").load_extension, "ui-select")
 			pcall(require("telescope").load_extension, "refactoring")
+			pcall(require("telescope").load_extension, "rest")
 
 			return custom_actions
 		end,
@@ -440,15 +445,15 @@ return {
 				end, { desc = "Gitsigns Prev [C]hange" })
 
 				-- Actions
-				map("n", "gh", gs.stage_hunk, { desc = "Gitsigns Stage Hunk" })
+				map("n", "gh", gs.stage_hunk, { desc = "[G]itsigns Stage [H]unk" })
 				map("v", "gh", function()
 					gs.stage_hunk({ vim.fn.line("."), vim.fn.line("v") })
 				end, { desc = "Gitsigns Stage Hunk" })
-				map("n", "gH", gs.reset_hunk, { desc = "Gitsigns Reset Hunk" })
+				map("n", "gH", gs.reset_hunk, { desc = "[G]itsigns Reset [H]unk" })
 				map("v", "gH", function()
 					gs.reset_hunk({ vim.fn.line("."), vim.fn.line("v") })
 				end, { desc = "Gitsigns Reset Hunk" })
-				map("n", "<leader>gd", gs.diffthis, { desc = "Gitsigns Diff View" })
+				map("n", "<leader>gd", gs.diffthis, { desc = "[G]itsigns [D]iff View" })
 				map("n", "<leader>gD", function()
 					gs.diffthis("~1")
 				end, { desc = "Gitsigns Diff View with ~" })
