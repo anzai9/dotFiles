@@ -461,7 +461,6 @@ return {
 					null_ls.builtins.diagnostics.mypy, -- python type checker
 					require("none-ls.diagnostics.ruff"), -- python linter
 					null_ls.builtins.diagnostics.selene, -- lua linter
-					null_ls.builtins.diagnostics.semgrep, -- static analysis tool
 					null_ls.builtins.diagnostics.stylelint, -- css lint
 					require("none-ls.diagnostics.eslint_d"),
 					-- terraform linters

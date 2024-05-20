@@ -12,7 +12,7 @@ return {
 		ft = "http",
 		dependencies = { "luarocks.nvim" },
 		config = function()
-			require("rest-nvim").setup()
+			require("rest-nvim").setup({})
 		end,
 	},
 }
