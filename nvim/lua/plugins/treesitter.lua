@@ -20,6 +20,7 @@ return {
 				"yaml",
 				"toml",
 				"json",
+				"xml",
 				"terraform",
 				"rust",
 				"markdown",
