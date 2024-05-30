@@ -1,0 +1,6 @@
+vim.keymap.set("n", "<leader>dt", function()
+	require("better-ts-errors").toggle()
+end, { silent = true, desc = "[T]oggle better typescript error" })
+vim.keymap.set("n", "<leader>dg", function()
+	require("better-ts-errors").goToDefinition()
+end, { silent = true, desc = "Better typescript [D]fenition [G]oto" })
