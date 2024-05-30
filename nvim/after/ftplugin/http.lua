@@ -13,3 +13,7 @@ vim.keymap.set(
 	"<CMD>Rest run last<CR>",
 	{ silent = true, desc = "[R] est Run [L]ast request" }
 )
+
+vim.keymap.set("n", "<leader>re", function()
+	require("telescope").extensions.rest.select_env()
+end, { desc = "[R]est [E]nvironment select" })
