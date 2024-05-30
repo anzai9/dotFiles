@@ -477,9 +477,8 @@ return {
 				default_commands = true, -- disable commands created by this plugin
 				disable_diagnostics = false, -- This will disable the diagnostics in a buffer whilst it is conflicted
 				highlights = {
-					-- They must have background color, otherwise the default color will be ,d
-					incoming = "DiffText",
-					current = "DiffAdd",
+					incoming = "DiffAdd",
+					current = "DiffText",
 				},
 			})
 		end,
@@ -544,5 +543,10 @@ return {
 				{ desc = "Open parent directory" }
 			)
 		end,
+	},
+	{
+		"OlegGulevskyy/better-ts-errors.nvim",
+		dependencies = { "MunifTanjim/nui.nvim" },
+		ft = { "typescript", "typescriptreact" },
 	},
 }
