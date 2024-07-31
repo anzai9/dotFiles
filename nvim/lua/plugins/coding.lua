@@ -35,6 +35,7 @@ return {
 	-- },
 	{
 		"max397574/better-escape.nvim",
+		version = "1.0.0", -- remove after upgrade the nvim to 0.10
 		opts = {
 			mapping = { "jj" },
 			timeout = 300,

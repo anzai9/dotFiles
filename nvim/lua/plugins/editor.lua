@@ -306,21 +306,22 @@ return {
 		"folke/which-key.nvim",
 		event = "VeryLazy",
 		config = function()
-			require("which-key").setup()
+			local wk = require("which-key")
+			wk.setup()
 
 			-- Document existing key chains
-			require("which-key").register({
-				["<leader>c"] = { name = "[C]ode", _ = "which_key_ignore" },
-				["<leader>d"] = { name = "[D]ocument", _ = "which_key_ignore" },
-				["<leader>r"] = { name = "[R]ename", _ = "which_key_ignore" },
-				["<leader>f"] = { name = "[F]ind", _ = "which_key_ignore" },
-				["<leader>w"] = { name = "[W]rite", _ = "which_key_ignore" },
-				["<leader>t"] = { name = "[T]oggle", _ = "which_key_ignore" },
-				["<leader>x"] = { name = "[]Trouble", _ = "which_key_ignore" },
-				["<leader>g"] = { name = "[G]it", _ = "which_key_ignore" },
-				["<leader>n"] = { name = "[N]ew", _ = "which_key_ignore" },
-				["["] = { name = "Previous", _ = "which_key_ignore" },
-				["]"] = { name = "Next", _ = "which_key_ignore" },
+			wk.add({
+				{ "<leader>c", group = "[C]ode" },
+				{ "<leader>d", group = "[D]ocument" },
+				{ "<leader>r", group = "[R]ename" },
+				{ "<leader>f", group = "[F]ind" },
+				{ "<leader>w", group = "[W]rite" },
+				{ "<leader>t", group = "[T]oggle" },
+				{ "<leader>x", group = "[]Trouble" },
+				{ "<leader>g", group = "[G]it" },
+				{ "<leader>n", group = "[N]ew" },
+				{ "[", group = "Previous" },
+				{ "]", group = "Next" },
 			})
 		end,
 	},
@@ -383,6 +384,7 @@ return {
 	},
 	{
 		"NeogitOrg/neogit",
+		version = "0.0.1",
 		dependencies = {
 			"nvim-lua/plenary.nvim", -- required
 			"sindrets/diffview.nvim",
