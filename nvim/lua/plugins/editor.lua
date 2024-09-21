@@ -390,7 +390,7 @@ return {
 	},
 	{
 		"NeogitOrg/neogit",
-		version = "0.0.1",
+		branch = "nightly",
 		dependencies = {
 			"nvim-lua/plenary.nvim", -- required
 			"sindrets/diffview.nvim",
