@@ -36,7 +36,7 @@ return {
 					end
 					local builtin = require("telescope.builtin")
 					--  To jump back, press <C-t>
-					map("gd", builtin.lsp_definitions, "[G]oto [D]efinition")
+					map("gd", builtin.lsp_definitions, "[G]oto [D]definition")
 					map("gr", builtin.lsp_references, "[G]oto [R]eferences")
 					map("gI", builtin.lsp_implementations, "[G]oto [I]mplementations")
 					map("<leader>D", builtin.lsp_type_definitions, "Type [D]finition")
@@ -120,7 +120,7 @@ return {
 						},
 					},
 				},
-				tsserver = {},
+				ts_ls = {},
 				lua_ls = {
 					settings = {
 						Lua = {
@@ -144,6 +144,20 @@ return {
 							validate = {
 								enable = true,
 							},
+						},
+					},
+				},
+				yamlls = {
+					settings = {
+						yaml = {
+							schemaStore = {
+								-- You must disable built-in schemaStore support if you want to use
+								-- this plugin and its advanced options like `ignore`.
+								enable = false,
+								-- Avoid TypeError: Cannot read properties of undefined (reading 'length')
+								url = "",
+							},
+							schemas = require("schemastore").yaml.schemas(),
 						},
 					},
 				},
@@ -171,7 +185,9 @@ return {
 			vim.list_extend(ensure_installed, {
 				"stylua",
 				"prettierd",
-				"eslint_d",
+				-- "prettier",
+				-- "eslint_d",
+				"eslint",
 				"rustywind",
 				"jq",
 				"yq",
@@ -212,32 +228,51 @@ return {
 			local conform = require("conform")
 			local slow_format_filetypes = {}
 
+			---@param bufnr integer
+			---@param ... string
+			---@return string
+			local function first(bufnr, ...)
+				for i = 1, select("#", ...) do
+					local formatter = select(i, ...)
+					if conform.get_formatter_info(formatter, bufnr).available then
+						return formatter
+					end
+				end
+				return select(1, ...)
+			end
+
 			local function react_format(bufnr)
 				if
 					require("conform").get_formatter_info("rustywind", bufnr).available
 				then
 					return {
 						{ "rustywind" },
-						{ "prettierd", "prettier" },
-						{ "eslint_d", "eslint" },
+						first(bufnr, "prettier", "prettierd"),
+						first(bufnr, "eslint", "eslint_d"),
 					}
 				else
 					return {
-						{ "prettierd", "prettier" },
-						{ "eslint_d", "eslint" },
+						first(bufnr, "prettier", "prettierd"),
+						first(bufnr, "eslint", "eslint_d"),
 					}
 				end
 			end
 
-			local js_format = {
-				{ "prettierd", "prettier" },
-				{ "eslint_d", "eslint" },
-			}
+			local function js_format(bufnr)
+				return {
+					first(bufnr, "prettierd", "prettier"),
+					first(bufnr, "eslint", "eslint_d"),
+				}
+			end
 
 			conform.setup({
 				notify_on_error = false,
 				format_on_save = function(bufnr)
 					if slow_format_filetypes[vim.bo[bufnr].filetype] then
+						return
+					end
+
+					if vim.b["disable_autoformat"] or vim.g.disable_autoformat then
 						return
 					end
 
@@ -253,8 +288,8 @@ return {
 					end
 
 					return {
-						timeout_ms = 500,
-						lsp_fallback = not disable_filetypes[vim.bo[bufnr].filetype],
+						timeout_ms = 800,
+						lsp_fallback = "fallback",
 					},
 						on_format
 				end,
@@ -282,7 +317,10 @@ return {
 					go = { "goimports", "golines", "gofumpt" },
 					json = { "jq" },
 					yaml = { "yq" },
-					markdown = { "prettierd" },
+					markdown = function(bufnr)
+						return { first(bufnr, "prettierd", "prettier") }
+					end,
+					terraform = { "terraform_fmt" },
 					["*"] = { "codespell" },
 				},
 			})
@@ -291,7 +329,18 @@ return {
 				require("conform").format({
 					lsp_fallback = true,
 					async = true,
-				})
+				}, function(err)
+					if not err then
+						local mode = vim.api.nvim_get_mode().mode
+						if vim.startswith(string.lower(mode), "v") then
+							vim.api.nvim_feedkeys(
+								vim.api.nvim_replace_termcodes("<Esc>", true, false, true),
+								"n",
+								true
+							)
+						end
+					end
+				end)
 			end, { desc = "[F]ormat buffer and range (in view mode)" })
 
 			vim.api.nvim_create_user_command("FormatDisable", function(args)
@@ -450,7 +499,8 @@ return {
 					null_ls.builtins.code_actions.gitsigns,
 					null_ls.builtins.code_actions.proselint, -- English style linter
 					null_ls.builtins.code_actions.refactoring,
-					require("none-ls.code_actions.eslint_d"),
+					-- require("none-ls.code_actions.eslint_d"),
+					require("none-ls.code_actions.eslint"),
 
 					null_ls.builtins.diagnostics.codespell,
 					null_ls.builtins.diagnostics.trail_space,
@@ -462,7 +512,8 @@ return {
 					require("none-ls.diagnostics.ruff"), -- python linter
 					null_ls.builtins.diagnostics.selene, -- lua linter
 					null_ls.builtins.diagnostics.stylelint, -- css lint
-					require("none-ls.diagnostics.eslint_d"),
+					-- require("none-ls.diagnostics.eslint_d"),
+					require("none-ls.diagnostics.eslint"),
 					-- terraform linters
 					null_ls.builtins.diagnostics.terraform_validate,
 					null_ls.builtins.diagnostics.tfsec,

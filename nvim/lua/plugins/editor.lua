@@ -168,8 +168,8 @@ return {
 
 			-- open multiple files at once
 			custom_actions._multiple_open = function(prompt_bufnr, open_cmd)
-				print("prompt_bufnr: " .. prompt_bufnr)
-				print("open_cmd: ", open_cmd)
+				-- print("prompt_bufnr: " .. prompt_bufnr)
+				-- print("open_cmd: ", open_cmd)
 				local picker = action_state.get_current_picker(prompt_bufnr)
 				local search_res_count = picker.manager:num_results()
 				if search_res_count == 0 then
@@ -328,63 +328,68 @@ return {
 	{
 		"folke/trouble.nvim",
 		dependencies = { "nvim-tree/nvim-web-devicons" },
+		cmd = "Trouble",
 		opts = {
-			icons = false,
-			width = 200,
-			signs = {
-				error = "error",
-				warning = "warn",
-				hint = "hint",
-				information = "info",
+			-- width = 200,
+			-- signs = {
+			-- 	error = "error",
+			-- 	warning = "warn",
+			-- 	hint = "hint",
+			-- 	information = "info",
+			-- },
+		},
+		keys = {
+			{
+				"<leader>xq",
+				"<cmd>Trouble qflist toggle<cr>",
+				{ silent = true, desc = "Trouble qucikfix" },
+			},
+			{
+				"<leader>xw",
+				"<cmd>Trouble diagnostics toggle<cr>",
+				{ silent = true, desc = "Trouble workspace diagnostics" },
+			},
+			{
+				"<leader>xd",
+				"<cmd>Trouble diagnostics toggle filter.buf=0<cr>",
+				{ silent = true, desc = "Toggle Trouble document diagnostics" },
+			},
+			{
+				"<leader>xl",
+				"<cmd>Trouble loclist toggle<cr>",
+				{ silent = true, desc = "Toggle Trouble loclist" },
+			},
+			{
+				"gR",
+				"<cmd>Trouble lsp_references toggle<cr>",
+				{ silent = true, desc = "Toggle Trouble lsp references" },
+			},
+			{
+				"[q",
+				function()
+					if require("trouble").is_open() then
+						require("trouble").previous({ new = false })
+					else
+						vim.cmd.cprev()
+					end
+				end,
+				{ silent = true, desc = "Previous Trouble" },
+			},
+			{
+				"]q",
+				function()
+					if require("trouble").is_open() then
+						require("trouble").next({ new = false })
+					else
+						vim.cmd.cnext()
+					end
+				end,
+				{ silent = true, desc = "Next Trouble" },
 			},
 		},
-		config = function()
-			vim.keymap.set(
-				"n",
-				"<leader>xq",
-				"<cmd>TroubleToggle quickfix<cr>",
-				{ silent = true, desc = "Trouble qucikfix" }
-			)
-			vim.keymap.set(
-				"n",
-				"<leader>xw",
-				"<cmd>TroubleToggle workspace_diagnostics<cr>",
-				{ silent = true, desc = "Trouble workspace diagnostics" }
-			)
-			vim.keymap.set(
-				"n",
-				"<leader>xd",
-				"<cmd>TroubleToggle document_diagnostics<cr>",
-				{ silent = true, desc = "Toggle Trouble document diagnostics" }
-			)
-			vim.keymap.set(
-				"n",
-				"<leader>xl",
-				"<cmd>TroubleToggle loclist<cr>",
-				{ silent = true, desc = "Toggle Trouble loclist" }
-			)
-			vim.keymap.set("n", "gR", function()
-				require("trouble").toggle("lsp_references")
-			end, { silent = true, desc = "Toggle Trouble lsp references" })
-			vim.keymap.set("n", "[q", function()
-				if require("trouble").is_open() then
-					require("trouble").previous({ skip_groups = true, jump = true })
-				else
-					vim.cmd.cprev()
-				end
-			end, { silent = true, desc = "Previous Trouble" })
-			vim.keymap.set("n", "]q", function()
-				if require("trouble").is_open() then
-					require("trouble").next({ skip_groups = true, jump = true })
-				else
-					vim.cmd.cnext()
-				end
-			end, { silent = true, desc = "Next Trouble" })
-		end,
 	},
 	{
 		"NeogitOrg/neogit",
-		version = "0.0.1",
 		dependencies = {
 			"nvim-lua/plenary.nvim", -- required
 			"sindrets/diffview.nvim",
