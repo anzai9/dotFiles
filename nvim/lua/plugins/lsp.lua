@@ -272,6 +272,10 @@ return {
 						return
 					end
 
+					if vim.b["disable_autoformat"] or vim.g.disable_autoformat then
+						return
+					end
+
 					local function on_format(err)
 						if err and err:match("timeout$") then
 							slow_format_filetypes[vim.bo[bufnr].filetype] = true
