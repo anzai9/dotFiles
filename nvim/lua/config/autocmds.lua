@@ -92,3 +92,12 @@ vim.api.nvim_create_autocmd({ "BufWritePre" }, {
 		vim.fn.mkdir(vim.fn.fnamemodify(file, ":p:h"), "p")
 	end,
 })
+
+-- Set filetype for .env and .env.* files
+vim.api.nvim_create_autocmd({ "BufRead", "BufNewFile" }, {
+	group = augroup("env_filetype", true),
+	pattern = { "*.env", ".env.*" },
+	callback = function()
+		vim.opt_local.filetype = "sh"
+	end,
+})
