@@ -120,7 +120,67 @@ return {
 						},
 					},
 				},
-				ts_ls = {},
+				ts_ls = {
+					settings = {
+						typescript = {
+							-- Inlay Hints preferences
+							inlayHints = {
+								-- You can set this to 'all' or 'literals' to enable more hints
+								includeInlayParameterNameHints = "all", -- 'none' | 'literals' | 'all'
+								includeInlayParameterNameHintsWhenArgumentMatchesName = false,
+								includeInlayFunctionParameterTypeHints = false,
+								includeInlayVariableTypeHints = false,
+								includeInlayVariableTypeHintsWhenTypeMatchesName = false,
+								includeInlayPropertyDeclarationTypeHints = false,
+								includeInlayFunctionLikeReturnTypeHints = true,
+								includeInlayEnumMemberValueHints = true,
+							},
+							-- Code Lens preferences
+							implementationsCodeLens = {
+								enabled = true,
+							},
+							referencesCodeLens = {
+								enabled = true,
+								showOnAllFunctions = true,
+							},
+							format = {
+								indentSize = vim.o.shiftwidth,
+								convertTabsToSpaces = vim.o.expandtab,
+								tabSize = vim.o.tabstop,
+							},
+						},
+						javascript = {
+							-- Inlay Hints preferences
+							inlayHints = {
+								-- You can set this to 'all' or 'literals' to enable more hints
+								includeInlayParameterNameHintsWhenArgumentMatchesName = false,
+								includeInlayParameterNameHints = "all", -- 'none' | 'literals' | 'all'
+								includeInlayVariableTypeHints = true,
+								includeInlayFunctionParameterTypeHints = true,
+								includeInlayVariableTypeHintsWhenTypeMatchesName = true,
+								includeInlayPropertyDeclarationTypeHints = true,
+								includeInlayFunctionLikeReturnTypeHints = true,
+								includeInlayEnumMemberValueHints = true,
+							},
+							-- Code Lens preferences
+							implementationsCodeLens = {
+								enabled = true,
+							},
+							referencesCodeLens = {
+								enabled = true,
+								showOnAllFunctions = true,
+							},
+							format = {
+								indentSize = vim.o.shiftwidth,
+								convertTabsToSpaces = vim.o.expandtab,
+								tabSize = vim.o.tabstop,
+							},
+						},
+						completions = {
+							completeFunctionCalls = true,
+						},
+					},
+				},
 				lua_ls = {
 					settings = {
 						Lua = {
@@ -222,7 +282,7 @@ return {
 	},
 	{ -- Autoformat
 		"stevearc/conform.nvim",
-		event = { "BufReadPre", "BufNewFile" },
+		event = { "BufWritePre" },
 		cmd = { "ConformInfo" },
 		config = function()
 			local conform = require("conform")
@@ -246,7 +306,7 @@ return {
 					require("conform").get_formatter_info("rustywind", bufnr).available
 				then
 					return {
-						{ "rustywind" },
+						"rustywind",
 						first(bufnr, "prettier", "prettierd"),
 						first(bufnr, "eslint", "eslint_d"),
 					}
@@ -276,15 +336,15 @@ return {
 						return
 					end
 
+					local disable_filetypes = { c = true, cpp = true }
+					if vim.tbl_contains(disable_filetypes, vim.bo[bufnr].filetype) then
+						return
+					end
+
 					local function on_format(err)
 						if err and err:match("timeout$") then
 							slow_format_filetypes[vim.bo[bufnr].filetype] = true
 						end
-					end
-
-					local disable_filetypes = { c = true, cpp = true }
-					if vim.tbl_contains(disable_filetypes, vim.bo[bufnr].filetype) then
-						return
 					end
 
 					return {
@@ -322,6 +382,9 @@ return {
 					end,
 					terraform = { "terraform_fmt" },
 					["*"] = { "codespell" },
+				},
+				default_format_opts = {
+					lsp_format = "fallback",
 				},
 			})
 
@@ -502,7 +565,6 @@ return {
 					-- require("none-ls.code_actions.eslint_d"),
 					require("none-ls.code_actions.eslint"),
 
-					null_ls.builtins.diagnostics.codespell,
 					null_ls.builtins.diagnostics.trail_space,
 					null_ls.builtins.diagnostics.proselint,
 					null_ls.builtins.diagnostics.golangci_lint, -- Go linter
