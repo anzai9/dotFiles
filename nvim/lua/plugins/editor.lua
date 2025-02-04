@@ -322,6 +322,7 @@ return {
 				{ "<leader>n", group = "[N]ew" },
 				{ "[", group = "Previous" },
 				{ "]", group = "Next" },
+				{ "<leader>a", group = "[A]i" },
 			})
 		end,
 	},
