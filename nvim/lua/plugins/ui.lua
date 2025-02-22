@@ -82,14 +82,9 @@ return {
 		"iamcco/markdown-preview.nvim",
 		cmd = { "MarkdownPreviewToggle", "MarkdownPreview", "MarkdownPreviewStop" },
 		build = function()
-			local res_cd = os.execute("cd app")
-			if res_cd ~= 0 then
-				vim.notify("Failed to build markdown-preview.nvim", "error")
-			end
-
 			local package_manager = vim.fn.execute("yarn") == 1 and "yarn" or "npm"
-			local res_install = os.execute(package_manager .. " install")
-			if res_install ~= 0 then
+			local res = os.execute("cd app && " .. package_manager .. " install")
+			if res ~= 0 then
 				vim.notify(
 					"Failed to install dependencies for markdown-preview.nvim",
 					"error"
