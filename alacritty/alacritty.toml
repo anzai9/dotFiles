@@ -16,6 +16,7 @@ multiplier = 3
 [window]
 decorations = "full"
 opacity = 1.0
+option_as_alt = "Both"
 
 [window.padding]
 x = 0
