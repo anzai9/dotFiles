@@ -51,7 +51,7 @@ return {
 					indicator = { style = "icon" },
 					tab_size = 18,
 					diagnostics = "nvim_lsp",
-					diagnostics_indicator = function(count, level, diagnostics_dict)
+					diagnostics_indicator = function(_count, _level, diagnostics_dict)
 						local s = " "
 						for e, n in pairs(diagnostics_dict) do
 							local sym = e == "error" and " "
@@ -81,7 +81,21 @@ return {
 	{
 		"iamcco/markdown-preview.nvim",
 		cmd = { "MarkdownPreviewToggle", "MarkdownPreview", "MarkdownPreviewStop" },
-		build = "cd app && pnpm install",
+		build = function()
+			local res_cd = os.execute("cd app")
+			if res_cd ~= 0 then
+				vim.notify("Failed to build markdown-preview.nvim", "error")
+			end
+
+			local package_manager = vim.fn.execute("yarn") == 1 and "yarn" or "npm"
+			local res_install = os.execute(package_manager .. " install")
+			if res_install ~= 0 then
+				vim.notify(
+					"Failed to install dependencies for markdown-preview.nvim",
+					"error"
+				)
+			end
+		end,
 		init = function()
 			vim.g.mkdp_filetypes = { "markdown" }
 		end,
