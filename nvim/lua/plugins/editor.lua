@@ -455,4 +455,18 @@ return {
 		dependencies = { "MunifTanjim/nui.nvim" },
 		ft = { "typescript", "typescriptreact" },
 	},
+	{
+		"barrett-ruth/live-server.nvim",
+		build = function()
+			local pkg = "live-server"
+			local cmd = vim.fn.executable("pnpm") == 1 and ("pnpm add -g " .. pkg)
+				or ("npm install -g " .. pkg)
+			local res = os.execute(cmd)
+			if res ~= 0 then
+				vim.notify("Failed to install" .. pkg, vim.log.levels.ERROR)
+			end
+		end,
+		cmd = { "LiveServerStart", "LiveServerStop" },
+		config = true,
+	},
 }
