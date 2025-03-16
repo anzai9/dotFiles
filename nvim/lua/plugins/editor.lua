@@ -316,7 +316,7 @@ return {
 				{ "<leader>r", group = "[R]ename" },
 				{ "<leader>f", group = "[F]ind" },
 				{ "<leader>w", group = "[W]rite" },
-				{ "<leader>t", group = "[T]oggle" },
+				-- { "<leader>t", group = "[T]oggle" },
 				{ "<leader>x", group = "[]Trouble" },
 				{ "<leader>g", group = "[G]it" },
 				{ "<leader>n", group = "[N]ew" },
@@ -343,17 +343,20 @@ return {
 			{
 				"<leader>xq",
 				"<cmd>Trouble qflist toggle<cr>",
-				{ silent = true, desc = "Trouble qucikfix" },
+				{ silent = true, desc = "Trouble [Q]ucikfix" },
 			},
 			{
 				"<leader>xw",
 				"<cmd>Trouble diagnostics toggle<cr>",
-				{ silent = true, desc = "Trouble workspace diagnostics" },
+				{ silent = true, desc = "Trouble [W]orkspace diagnostics" },
 			},
 			{
 				"<leader>xd",
 				"<cmd>Trouble diagnostics toggle filter.buf=0<cr>",
-				{ silent = true, desc = "Toggle Trouble document diagnostics" },
+				{
+					silent = true,
+					desc = "Toggle Trouble current [D]ocument diagnostics",
+				},
 			},
 			{
 				"<leader>xl",

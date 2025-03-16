@@ -75,6 +75,7 @@ return {
 				end,
 			})
 
+			-- ufo setup
 			local capabilities = vim.lsp.protocol.make_client_capabilities()
 			capabilities = vim.tbl_deep_extend(
 				"force",
@@ -184,12 +185,25 @@ return {
 				lua_ls = {
 					settings = {
 						Lua = {
+							runtime = {
+								version = "LuaJIT",
+								special = { reload = "require" },
+							},
 							completion = {
 								callSnippet = "Replace",
 							},
 							diagnostics = {
 								disable = { "missing-fields" },
 								globals = { "vim" },
+							},
+							telemetry = {
+								enable = false,
+							},
+							workspace = {
+								library = {
+									vim.fn.expand("$VIMRUNTIME/lua"),
+									vim.api.nvim_get_runtime_file("", true),
+								},
 							},
 						},
 					},
@@ -381,7 +395,14 @@ return {
 						return { first(bufnr, "prettierd", "prettier") }
 					end,
 					terraform = { "terraform_fmt" },
-					["*"] = { "codespell" },
+					["*"] = function(bufnr)
+						local filename = vim.api.nvim_buf_get_name(bufnr)
+						if filename:match("package%.json$") then
+							return {}
+						end
+
+						return { "codespell" }
+					end,
 				},
 				default_format_opts = {
 					lsp_format = "fallback",
@@ -518,11 +539,11 @@ return {
 				}),
 				sources = {
 					{ name = "copilot" },
-					-- { name = "codeium" },
 					{ name = "path" },
 					{ name = "nvim_lsp" },
 					{ name = "buffer", keyword_length = 3 },
 					{ name = "luasnip", keyword_length = 2 },
+					{ name = "render-markdown" },
 				},
 			})
 
@@ -599,7 +620,7 @@ return {
 				require("refactoring").refactor("Extract Function To File")
 			end, { desc = "[R]efactor extract function to [F]ile" })
 			vim.keymap.set("x", "<leader>rv", function()
-				require("refactoring").refactor("Extract Variable")
+				require("refactoring").refactor("Extract Varikble")
 			end, { desc = "[R]efactor extract [V]ariable" })
 			vim.keymap.set("n", "<leader>rI", function()
 				require("refactoring").refactor("Inline Function")
