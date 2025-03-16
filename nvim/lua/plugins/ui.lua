@@ -75,9 +75,11 @@ return {
 		config = true,
 		opts = {
 			check_ts = true,
+			ts_config = {
+				lua = { "string" },
+			},
 		},
 	},
-	{ "windwp/nvim-ts-autotag" },
 	{
 		"iamcco/markdown-preview.nvim",
 		cmd = { "MarkdownPreviewToggle", "MarkdownPreview", "MarkdownPreviewStop" },
