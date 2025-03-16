@@ -83,7 +83,7 @@ vim.keymap.set(
 	{ desc = "Escape and clear hlsearch" }
 )
 -- New file
-vim.keymap.set("n", "<leader>nf", "<cmd>enew<cr>", { desc = "[N]ew [F]ile" })
+vim.keymap.set("n", "<leader>nf", "<cmd>ene<cr>", { desc = "[N]ew [F]ile" })
 --  See `:help wincmd` for a list of all window commands
 vim.keymap.set(
 	"n",
@@ -108,4 +108,21 @@ vim.keymap.set(
 	"<C-k>",
 	"<C-w><C-k>",
 	{ desc = "Move focus to the upper window" }
+)
+
+-- quickfix
+vim.keymap.set(
+	"n",
+	"<leader>qo",
+	"<cmd>copen<CR>",
+	{ desc = "Open [Q]uickfix" }
+)
+vim.keymap.set("n", "<M-j>", "<cmd>cnext<CR>", { desc = "Next Quickfix" })
+vim.keymap.set("n", "<M-k>", "<cmd>cprev<CR>", { desc = "Previous Quickfix" })
+
+vim.keymap.set(
+	"n",
+	"<M-x>",
+	"<cmd>! %:p<CR>",
+	{ desc = "[E]xecute current [B]buffer " }
 )
