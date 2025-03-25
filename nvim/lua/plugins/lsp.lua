@@ -1,3 +1,6 @@
+local hostname = vim.uv.os_gethostname()
+local isHome = string.match(hostname, "local")
+
 return {
 	{
 		"neovim/nvim-lspconfig",
@@ -87,6 +90,52 @@ return {
 				lineFoldingOnly = true,
 			}
 
+			local gopls = {
+				analyses = {
+					unusedparams = true,
+				},
+				staticcheck = true,
+				gofumpt = true,
+			}
+
+			local rust_analyzer = {
+				settings = {
+					["rust-analyzer"] = {
+						imports = {
+							granularity = {
+								group = "module",
+							},
+							prefix = "self",
+						},
+						cargo = {
+							buildScripts = {
+								enable = true,
+							},
+						},
+						procMacro = {
+							enable = true,
+						},
+					},
+				},
+			}
+
+			local prismals = {
+				settings = {
+					prisma = {
+						prismaFmtBinPath = "prisma-fmt",
+						prismaFmtArgs = { "--indent-width=4" },
+						lint = {
+							enable = true,
+							autoFix = true,
+						},
+						format = {
+							enable = true,
+							autoFix = true,
+						},
+					},
+				},
+			}
+
 			--  Add any additional override configuration in the following tables. Available keys are:
 			--  - cmd (table): Override the default command used to start the server
 			--  - filetypes (table): Override the default list of associated filetypes for the server
@@ -94,33 +143,6 @@ return {
 			--  - settings (table): Override the default settings passed when initializing the server.
 			--        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
 			local servers = {
-				gopls = {
-					analyses = {
-						unusedparams = true,
-					},
-					staticcheck = true,
-					gofumpt = true,
-				},
-				rust_analyzer = {
-					settings = {
-						["rust-analyzer"] = {
-							imports = {
-								granularity = {
-									group = "module",
-								},
-								prefix = "self",
-							},
-							cargo = {
-								buildScripts = {
-									enable = true,
-								},
-							},
-							procMacro = {
-								enable = true,
-							},
-						},
-					},
-				},
 				ts_ls = {
 					settings = {
 						typescript = {
@@ -219,6 +241,11 @@ return {
 								enable = true,
 							},
 						},
+						filetypes = {
+							"json",
+							"jsonc",
+							"swcrc",
+						},
 					},
 				},
 				yamlls = {
@@ -235,23 +262,13 @@ return {
 						},
 					},
 				},
-				prismals = {
-					settings = {
-						prisma = {
-							prismaFmtBinPath = "prisma-fmt",
-							prismaFmtArgs = { "--indent-width=4" },
-							lint = {
-								enable = true,
-								autoFix = true,
-							},
-							format = {
-								enable = true,
-								autoFix = true,
-							},
-						},
-					},
-				},
 			}
+
+			if isHome then
+				servers["gopls"] = gopls
+				servers["rust_analyzer"] = rust_analyzer
+				servers["prismals"] = prismals
+			end
 
 			require("fidget").setup({})
 			require("mason").setup()
@@ -339,6 +356,41 @@ return {
 				}
 			end
 
+			local formatters_by_ft = {
+				lua = { "stylua" },
+				python = function(bufnr)
+					if
+						require("conform").get_formatter_info("ruff_format", bufnr).available
+					then
+						return { "ruff_format" }
+					else
+						return { "isort", "black" }
+					end
+				end,
+				javascript = js_format,
+				typescript = js_format,
+				javascriptreact = react_format,
+				typescriptreact = react_format,
+				json = { "jq" },
+				yaml = { "yq" },
+				markdown = function(bufnr)
+					return { first(bufnr, "prettierd", "prettier") }
+				end,
+				terraform = { "terraform_fmt" },
+				["*"] = function(bufnr)
+					local filename = vim.api.nvim_buf_get_name(bufnr)
+					if filename:match("package%.json$") then
+						return {}
+					end
+
+					return { "codespell" }
+				end,
+			}
+
+			if isHome then
+				formatters_by_ft["go"] = { "gofumpt", "goimports", "golines" }
+			end
+
 			conform.setup({
 				notify_on_error = false,
 				format_on_save = function(bufnr)
@@ -373,37 +425,7 @@ return {
 					end
 					return { lsp_fallback = true }
 				end,
-				formatters_by_ft = {
-					lua = { "stylua" },
-					python = function(bufnr)
-						if
-							require("conform").get_formatter_info("ruff_format", bufnr).available
-						then
-							return { "ruff_format" }
-						else
-							return { "isort", "black" }
-						end
-					end,
-					javascript = js_format,
-					typescript = js_format,
-					javascriptreact = react_format,
-					typescriptreact = react_format,
-					go = { "goimports", "golines", "gofumpt" },
-					json = { "jq" },
-					yaml = { "yq" },
-					markdown = function(bufnr)
-						return { first(bufnr, "prettierd", "prettier") }
-					end,
-					terraform = { "terraform_fmt" },
-					["*"] = function(bufnr)
-						local filename = vim.api.nvim_buf_get_name(bufnr)
-						if filename:match("package%.json$") then
-							return {}
-						end
-
-						return { "codespell" }
-					end,
-				},
+				formatters_by_ft = formatters_by_ft,
 				default_format_opts = {
 					lsp_format = "fallback",
 				},
@@ -495,7 +517,7 @@ return {
 						show_labelDetails = true, -- show labelDetails in menu. Disabled by default
 						-- The function below will be called before any actual modifications from lspkind
 						-- so that you can provide more controls on popup customization. (See [#30](https://github.com/onsails/lspkind-nvim/pull/30))
-						before = function(entry, vim_item)
+						before = function(_entry, vim_item)
 							return vim_item
 						end,
 					}),
@@ -578,30 +600,35 @@ return {
 		},
 		config = function()
 			local null_ls = require("null-ls")
-			null_ls.setup({
-				sources = {
-					null_ls.builtins.code_actions.gitsigns,
-					null_ls.builtins.code_actions.proselint, -- English style linter
-					null_ls.builtins.code_actions.refactoring,
-					-- require("none-ls.code_actions.eslint_d"),
-					require("none-ls.code_actions.eslint"),
+			local sources = {
+				null_ls.builtins.code_actions.gitsigns,
+				null_ls.builtins.code_actions.proselint, -- English style linter
+				null_ls.builtins.code_actions.refactoring,
+				-- require("none-ls.code_actions.eslint_d"),
+				require("none-ls.code_actions.eslint"),
 
-					null_ls.builtins.diagnostics.trail_space,
-					null_ls.builtins.diagnostics.proselint,
-					null_ls.builtins.diagnostics.golangci_lint, -- Go linter
-					null_ls.builtins.diagnostics.staticcheck, -- Go static analysis tool
-					null_ls.builtins.diagnostics.hadolint, -- Dockerfile linter
-					null_ls.builtins.diagnostics.mypy, -- python type checker
-					require("none-ls.diagnostics.ruff"), -- python linter
-					null_ls.builtins.diagnostics.selene, -- lua linter
-					null_ls.builtins.diagnostics.stylelint, -- css lint
-					-- require("none-ls.diagnostics.eslint_d"),
-					require("none-ls.diagnostics.eslint"),
-					-- terraform linters
-					null_ls.builtins.diagnostics.terraform_validate,
-					null_ls.builtins.diagnostics.tfsec,
-					null_ls.builtins.diagnostics.trivy,
-				},
+				null_ls.builtins.diagnostics.trail_space,
+				null_ls.builtins.diagnostics.proselint,
+				null_ls.builtins.diagnostics.hadolint, -- Dockerfile linter
+				null_ls.builtins.diagnostics.mypy, -- python type checker
+				require("none-ls.diagnostics.ruff"), -- python linter
+				null_ls.builtins.diagnostics.selene, -- lua linter
+				null_ls.builtins.diagnostics.stylelint, -- css lint
+				-- require("none-ls.diagnostics.eslint_d"),
+				require("none-ls.diagnostics.eslint"),
+				-- terraform linters
+				null_ls.builtins.diagnostics.terraform_validate,
+				null_ls.builtins.diagnostics.tfsec,
+				null_ls.builtins.diagnostics.trivy,
+			}
+			if isHome then
+				-- Go linter
+				table.insert(sources, null_ls.builtins.diagnostics.golangci_lint)
+				-- Go static analysis tool
+				table.insert(sources, null_ls.builtins.diagnostics.staticcheck)
+			end
+			null_ls.setup({
+				sources = sources,
 			})
 		end,
 	},
