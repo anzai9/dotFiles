@@ -107,6 +107,9 @@ return {
 		config = function()
 			require("render-markdown").setup({
 				file_types = { "markdown", "copilot-chat" },
+				latex = {
+					enabled = false,
+				},
 			})
 		end,
 	},

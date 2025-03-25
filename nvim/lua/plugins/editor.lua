@@ -279,6 +279,15 @@ return {
 							},
 						},
 					},
+					live_grep = {
+						additional_args = {
+							"--hidden",
+							"--glob",
+							"!node_modules/**",
+							"--glob",
+							"!.git/**",
+						},
+					},
 				},
 				extensions = {
 					fzf = {
